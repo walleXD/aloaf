@@ -1,17 +1,23 @@
 {
   "name": "@loaf/api",
   "version": "0.1.0",
-  "main": "index.js",
+  "main": "lib/index.js",
   "license": "MIT",
   "private": true,
   "devDependencies": {
+    "@types/micro": "^7.3.3",
     "@types/node": "^12.6.8",
-    "awesome-typescript-loader": "^5.2.1",
-    "backpack-core": "^0.8.4",
-    "typescript": "^3.5.3",
-    "webpack-merge": "^4.2.1"
+    "concurrently": "^4.1.1",
+    "micro-dev": "^3.0.0",
+    "rimraf": "^2.6.3",
+    "typescript": "^3.5.3"
   },
   "scripts": {
-    "dev": "backpack"
+    "build": "rimraf lib && tsc",
+    "dev": "yarn build && concurrently \"tsc --watch\" \"micro-dev\""
+  },
+  "dependencies": {
+    "apollo-server-micro": "^2.7.0",
+    "graphql": "^14.4.2"
   }
 }
