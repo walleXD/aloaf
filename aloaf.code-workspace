@@ -1,11 +1,14 @@
 {
   "folders": [
-	{
-		"path": "."
-	},
-	{
-		"path": "packages/web"
-	}
-],
+    {
+      "path": "."
+    },
+    {
+      "path": "packages/web"
+    },
+    {
+      "path": "packages/api"
+    }
+  ],
   "settings": {}
 }

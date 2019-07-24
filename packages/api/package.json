@@ -1,0 +1,17 @@
+{
+  "name": "@loaf/api",
+  "version": "0.1.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "@types/node": "^12.6.8",
+    "awesome-typescript-loader": "^5.2.1",
+    "backpack-core": "^0.8.4",
+    "typescript": "^3.5.3",
+    "webpack-merge": "^4.2.1"
+  },
+  "scripts": {
+    "dev": "backpack"
+  }
+}
