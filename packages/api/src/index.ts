@@ -1,4 +1,5 @@
 import { ApolloServer, gql } from 'apollo-server-micro'
+import { Request, Response } from 'apollo-server-env'
 
 const typeDefs = gql`
   type Query {
@@ -8,7 +9,7 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    hello: (root, args, context) => {
+    hello: (): string => {
       return "Hello world! It's your boy, how far now unicodeveloper"
     }
   }
@@ -21,4 +22,11 @@ const server = new ApolloServer({
   playground: true
 })
 
-module.exports = server.createHandler()
+const bootstrap = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  return server.createHandler()(req, res)
+}
+
+module.exports = bootstrap
