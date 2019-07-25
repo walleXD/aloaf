@@ -1,6 +1,0 @@
-{
-  "watch": ["src", "../**/src/**"],
-  "ext": "ts",
-  "ignore": ["src/**/*.spec.ts"],
-  "exec": "yarn dev:combo"
-}

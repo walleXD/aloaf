@@ -13,7 +13,7 @@
   },
   "references": [
     {
-      "path": "../monoTest"
+      "path": "../mono-test"
     }
   ],
   "exclude": ["node_modules", "lib"],
