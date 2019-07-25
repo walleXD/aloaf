@@ -18,7 +18,7 @@
     "start": "micro",
     "build": "rimraf lib && tsc -b",
     "dev:ts": "tsc -b --watch",
-    "dev:server": "micro-dev --watch ../",
+    "dev:server": "micro-dev --watch ../ -p 4000",
     "dev": "yarn build && concurrently \"yarn dev:ts\" \"yarn dev:server\""
   },
   "dependencies": {

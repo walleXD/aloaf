@@ -16,6 +16,12 @@
     "baseUrl": "./packages",
     "paths": {
       "@loaf/*": ["./*/src"]
-    }
+    },
+
+    "plugins": [
+      {
+        "name": "@divyenduz/ts-graphql-plugin"
+      }
+    ]
   }
 }

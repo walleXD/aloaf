@@ -2,6 +2,7 @@
   "name": "@aloaf/root",
   "private": true,
   "devDependencies": {
+    "@divyenduz/ts-graphql-plugin": "^0.1.0",
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
     "eslint": "^6.1.0",
