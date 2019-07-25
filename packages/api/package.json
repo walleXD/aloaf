@@ -15,13 +15,18 @@
     "typescript": "^3.5.3"
   },
   "scripts": {
-    "build": "rimraf lib && tsc",
-    "dev": "yarn build && concurrently \"tsc --watch\" \"micro-dev\""
+    "start": "micro",
+    "build": "rimraf lib && tsc -b",
+    "dev:ts": "tsc -b --watch",
+    "dev:server": "micro-dev --watch ../",
+    "dev": "yarn build && concurrently \"yarn dev:ts\" \"yarn dev:server\""
   },
   "dependencies": {
+    "@loaf/mono-test": "*",
     "apollo-connector-mongodb": "^2.0.3",
     "apollo-server-micro": "^2.7.0",
     "graphql": "^14.4.2",
+    "micro": "^9.3.4",
     "nexus": "^0.12.0-beta.6"
   }
 }

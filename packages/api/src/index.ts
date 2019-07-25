@@ -1,7 +1,10 @@
 import { ApolloServer } from 'apollo-server-micro'
 import { Request, Response } from 'apollo-server-env'
 
+import mono from '@loaf/mono-test'
 import generateSchema from './schema'
+
+mono()
 
 const isDev = process.env.NODE_ENV === 'development'
 

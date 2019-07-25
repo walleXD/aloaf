@@ -1,0 +1,16 @@
+{
+  "name": "@loaf/mono-test",
+  "version": "0.1.0",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "rimraf lib && tsc"
+  },
+  "devDependencies": {
+    "@types/node": "^12.6.8",
+    "concurrently": "^4.1.1",
+    "rimraf": "^2.6.3",
+    "typescript": "^3.5.3"
+  }
+}

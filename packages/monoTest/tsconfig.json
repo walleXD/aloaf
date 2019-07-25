@@ -3,19 +3,14 @@
   "compilerOptions": {
     "lib": ["esnext"],
     "module": "commonjs",
+    "rootDir": "src",
     "outDir": "lib",
     "sourceMap": true,
 
-    "isolatedModules": true,
-    "declaration": false,
-    "composite": false,
-    "declarationMap": false
+    "declaration": true,
+    "composite": true,
+    "declarationMap": true
   },
-  "references": [
-    {
-      "path": "../monoTest"
-    }
-  ],
   "exclude": ["node_modules", "lib"],
   "include": ["schema-types.d.ts", "src/**/*.ts"]
 }
