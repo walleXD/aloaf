@@ -1,23 +1,16 @@
-import { ApolloServer, gql } from 'apollo-server-micro'
+import { ApolloServer } from 'apollo-server-micro'
 import { Request, Response } from 'apollo-server-env'
 
-const typeDefs = gql`
-  type Query {
-    hello: String
-  }
-`
+import generateSchema from './schema'
 
-const resolvers = {
-  Query: {
-    hello: (): string => {
-      return "Hello world! It's your boy, how far now unicodeveloper"
-    }
-  }
+const isDev = process.env.NODE_ENV === 'development'
+
+if (isDev) {
+  require('dotenv').config()
 }
 
 const server = new ApolloServer({
-  typeDefs,
-  resolvers,
+  schema: generateSchema(),
   introspection: true,
   playground: true
 })
