@@ -19,6 +19,7 @@
     "dev": "yarn build && concurrently \"tsc --watch\" \"micro-dev\""
   },
   "dependencies": {
+    "apollo-connector-mongodb": "^2.0.3",
     "apollo-server-micro": "^2.7.0",
     "graphql": "^14.4.2",
     "nexus": "^0.12.0-beta.6"

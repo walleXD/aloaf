@@ -9,17 +9,20 @@ if (isDev) {
   require('dotenv').config()
 }
 
-const server = new ApolloServer({
-  schema: generateSchema(),
-  introspection: true,
-  playground: true
-})
+const initServer = (): ApolloServer =>
+  new ApolloServer({
+    schema: generateSchema(),
+    introspection: true,
+    playground: isDev
+  })
 
 const bootstrap = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  return server.createHandler()(req, res)
+  const server = initServer()
+
+  server.createHandler()(req, res)
 }
 
 module.exports = bootstrap
