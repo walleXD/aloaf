@@ -10,6 +10,7 @@ interface GenerateContextOpts {
   req: Request
   entities: AllEntities
 }
+
 interface Context {
   req: Request
   db: AllEntities

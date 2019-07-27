@@ -7,15 +7,8 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "API: Compiler",
-      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/tsc",
-      "runtimeArgs": ["-b", "--watch"],
-      "console": "integratedTerminal"
-    },
-    {
-      "type": "node",
-      "request": "launch",
       "name": "API: Server",
+      "preLaunchTask": "API: Compile",
       "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/micro-dev",
       "runtimeArgs": ["--watch", "../", "-p", "4000"],
       "env": {
@@ -23,12 +16,6 @@
       },
       "port": 9229,
       "console": "integratedTerminal"
-    }
-  ],
-  "compounds": [
-    {
-      "name": "API: Full",
-      "configurations": ["API: Compiler", "API: Server"]
     }
   ]
 }
