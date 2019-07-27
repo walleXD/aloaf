@@ -1,31 +1,46 @@
+import './env'
 import { ApolloServer } from 'apollo-server-micro'
 import { Request, Response } from 'apollo-server-env'
-
-import mono from '@loaf/mono-test'
+import initDB, { getEntities, AllEntities } from './db'
 import generateSchema from './schema'
-
-mono()
 
 const isDev = process.env.NODE_ENV === 'development'
 
-if (isDev) {
-  require('dotenv').config()
+interface GenerateContextOpts {
+  req: Request
+  entities: AllEntities
+}
+interface Context {
+  req: Request
+  db: AllEntities
 }
 
-const initServer = (): ApolloServer =>
+const generateContext = async ({
+  req,
+  entities
+}: GenerateContextOpts): Promise<Context> => ({
+  req,
+  db: entities
+})
+
+const initServer = (context: Context): ApolloServer =>
   new ApolloServer({
     schema: generateSchema(),
     introspection: true,
-    playground: isDev
+    playground: isDev,
+    context
   })
 
 const bootstrap = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const server = initServer()
+  const DBs = await initDB()
+  const entities = getEntities(DBs)
+  const context = await generateContext({ req, entities })
+  const server = initServer(context)
 
-  server.createHandler()(req, res)
+  return server.createHandler()(req, res)
 }
 
 module.exports = bootstrap

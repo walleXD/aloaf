@@ -6,7 +6,7 @@
     "outDir": "lib",
     "sourceMap": true,
 
-    "isolatedModules": true,
+    "isolatedModules": false,
     "declaration": false,
     "composite": false,
     "declarationMap": false
