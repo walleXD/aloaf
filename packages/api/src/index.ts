@@ -1,10 +1,13 @@
-import './env'
+import { mongoURL1, mongoURL2, isDev } from './env'
 import { ApolloServer } from 'apollo-server-micro'
 import { Request, Response } from 'apollo-server-env'
-import initDB, { getEntities, AllEntities } from './db'
-import generateSchema from './schema'
 
-const isDev = process.env.NODE_ENV === 'development'
+import initDB, {
+  getEntities,
+  AllEntities,
+  DBConfig
+} from './db'
+import generateSchema from './schema'
 
 interface GenerateContextOpts {
   req: Request
@@ -32,11 +35,16 @@ const initServer = (context: Context): ApolloServer =>
     context
   })
 
+const dBConfigs: DBConfig[] = [
+  { name: 'DB1', url: mongoURL1 },
+  { name: 'DB2', url: mongoURL2 }
+]
+
 const bootstrap = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const DBs = await initDB()
+  const DBs = await initDB(dBConfigs)
   const entities = getEntities(DBs)
   const context = await generateContext({ req, entities })
   const server = initServer(context)
