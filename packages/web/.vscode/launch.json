@@ -14,7 +14,7 @@
       "type": "node",
       "request": "launch",
       "name": "Next: Node",
-      "runtimeExecutable": "./node_modules/.bin/next",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/next",
       "env": {
         "NODE_OPTIONS": "--inspect-brk"
       },
