@@ -1,10 +1,12 @@
 import { makeSchema } from 'nexus'
 import { NexusSchema } from 'nexus/dist/core'
 import { join } from 'path'
+import { applyMiddleware } from 'graphql-middleware'
+import { shield } from 'graphql-shield'
 
 import { PlayThingTypes } from './modules/playThing'
 
-export default (): NexusSchema =>
+export const generateSchema = (): NexusSchema =>
   makeSchema({
     types: [PlayThingTypes],
     outputs: {
@@ -12,3 +14,10 @@ export default (): NexusSchema =>
       typegen: join(__dirname, '../schema-types.d.ts')
     }
   })
+
+const permissions = shield({})
+
+const defaultMiddlewares = [permissions]
+
+export default (): NexusSchema =>
+  applyMiddleware(generateSchema(), ...defaultMiddlewares)
