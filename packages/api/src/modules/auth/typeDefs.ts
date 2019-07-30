@@ -12,13 +12,12 @@ import {
   ClientRequest as Request
 } from 'http'
 
-import { UserModel } from './models'
+import { UserModel, User as UserType } from './models'
 import {
   TokenGenerator,
   signInVerifiedUser,
   addTokensToCookies
 } from './utils'
-import { ObjectID } from 'bson'
 
 export const Email = asNexusMethod(EmailAddress, 'email')
 
@@ -53,12 +52,11 @@ export const Query = extendType({
       async resolve(
         _,
         __,
-        { userId, models }: AuthContext
+        { user }: AuthContext
       ): Promise<NexusGenRootTypes['User'] | null> {
-        if (!userId) return null
-        const user = await models.users.findUserById(userId)
-        if (!user) return null
-        return { ...user, id: user._id.toString() }
+        return !user
+          ? null
+          : { ...user, id: user._id.toString() }
       }
     })
   }
@@ -70,7 +68,7 @@ interface AuthContext {
   models: {
     users: UserModel
   }
-  userId: ObjectID
+  user: UserType | null
   tokenGenerator: TokenGenerator
 }
 

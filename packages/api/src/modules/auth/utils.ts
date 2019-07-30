@@ -1,7 +1,7 @@
 import { sign, verify } from 'jsonwebtoken'
 import { ServerResponse, IncomingMessage } from 'http'
 import { serialize, parse } from 'cookie'
-import { User } from './models'
+import { User, UserModel } from './models'
 import { ObjectId } from 'mongodb'
 
 const tokenGenerator = (
@@ -83,4 +83,13 @@ export const getActiveUserId = (
   } catch (e) {
     return null
   }
+}
+
+export const getActiveUser = async (
+  req: IncomingMessage,
+  accessTokenSecret: string,
+  models: { users: UserModel }
+): Promise<User | null> => {
+  const userId = getActiveUserId(req, accessTokenSecret)
+  return userId ? models.users.findUserById(userId) : null
 }

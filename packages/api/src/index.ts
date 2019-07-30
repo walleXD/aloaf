@@ -19,7 +19,7 @@ import {
   TokenGenerator,
   tokenGeneratorWithSecrets as tokeGenerator,
   User,
-  getActiveUserId
+  getActiveUser
 } from './modules/auth'
 
 interface GenerateContextOpts {
@@ -34,7 +34,7 @@ interface Context {
   req: Request
   models: Models
   tokenGenerator: TokenGenerator
-  userId: User['_id'] | null
+  user: User | null
 }
 
 const generateContext = async ({
@@ -47,7 +47,7 @@ const generateContext = async ({
   req,
   models,
   tokenGenerator,
-  userId: getActiveUserId(req, accessSecret)
+  user: await getActiveUser(req, accessSecret, models)
 })
 
 const initServer = (context: Context): ApolloServer =>
