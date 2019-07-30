@@ -2,6 +2,29 @@
 ### Do not make changes to this file directly
 
 
+"""Payload sent to users after successful authentication"""
+type AuthPayload {
+  accessToken: String!
+  count: Int!
+  refreshToken: String!
+}
+
+type Mutation {
+  signIn(cookies: Boolean, email: String!, password: String!): AuthPayload
+  signUp(cookies: Boolean, email: String!, password: String!): AuthPayload
+}
+
 type Query {
   hello: String!
+  me: User
+}
+
+type User {
+  count: Int!
+
+  """User's email"""
+  email: String!
+
+  """Id of the user"""
+  id: ID!
 }

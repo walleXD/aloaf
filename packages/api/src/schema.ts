@@ -5,10 +5,11 @@ import { applyMiddleware } from 'graphql-middleware'
 import { shield } from 'graphql-shield'
 
 import { PlayThingTypes } from './modules/playThing'
+import { AuthTypes } from './modules/auth'
 
 export const generateSchema = (): NexusSchema =>
   makeSchema({
-    types: [PlayThingTypes],
+    types: [PlayThingTypes, AuthTypes],
     outputs: {
       schema: join(__dirname, '../../../schema.graphql'),
       typegen: join(__dirname, '../schema-types.d.ts')
