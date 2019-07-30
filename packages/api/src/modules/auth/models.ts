@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { MongoEntity } from 'apollo-connector-mongodb'
 import { hash } from 'bcryptjs'
 import { ObjectID } from 'mongodb'

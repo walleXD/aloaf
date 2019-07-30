@@ -2,10 +2,10 @@ import { makeSchema } from 'nexus'
 import { NexusSchema } from 'nexus/dist/core'
 import { join } from 'path'
 import { applyMiddleware } from 'graphql-middleware'
-import { shield } from 'graphql-shield'
 
 import { PlayThingTypes } from './modules/playThing'
-import { AuthTypes } from './modules/auth'
+import { AuthTypes, AuthPermissions } from './modules/auth'
+import { generatePermissions } from './utils'
 
 export const generateSchema = (): NexusSchema =>
   makeSchema({
@@ -16,7 +16,7 @@ export const generateSchema = (): NexusSchema =>
     }
   })
 
-const permissions = shield({})
+const permissions = generatePermissions(AuthPermissions)
 
 const defaultMiddlewares = [permissions]
 
