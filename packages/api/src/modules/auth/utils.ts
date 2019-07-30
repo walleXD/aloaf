@@ -2,7 +2,8 @@ import { sign, verify } from 'jsonwebtoken'
 import { ServerResponse, IncomingMessage } from 'http'
 import { serialize, parse } from 'cookie'
 import { User, UserModel } from './models'
-import { ObjectId } from 'mongodb'
+import { ObjectId, ObjectID } from 'mongodb'
+import { compare } from 'bcryptjs'
 
 const tokenGenerator = (
   data: Record<string, string | number>,
@@ -91,5 +92,50 @@ export const getActiveUser = async (
   models: { users: UserModel }
 ): Promise<User | null> => {
   const userId = getActiveUserId(req, accessTokenSecret)
-  return userId ? models.users.findUserById(userId) : null
+  return userId && models.users.findUserById(userId)
+}
+
+export const signInHelper = (
+  userId: ObjectID,
+  count: number,
+  tokenGenerator: TokenGenerator,
+  res: ServerResponse,
+  useCookies: boolean | null
+): {
+  refreshToken: string
+  accessToken: string
+  count: number
+} => {
+  const { refreshToken, accessToken } = signInVerifiedUser(
+    userId.toString(),
+    count,
+    tokenGenerator
+  )
+
+  if (useCookies)
+    addTokensToCookies({ accessToken, refreshToken }, res)
+
+  return {
+    refreshToken,
+    accessToken,
+    count
+  }
+}
+
+export const getValidatedUser = async (
+  email: string,
+  password: string,
+  users: UserModel
+): Promise<User> => {
+  const user = await users.findUserByEmail(email)
+  if (!user) throw new Error('Invalid email provided')
+
+  const validPassword = await compare(
+    password,
+    user.passwordHash
+  )
+  if (!validPassword)
+    throw new Error('Invalid credential combination')
+
+  return user
 }

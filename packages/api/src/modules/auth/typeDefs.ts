@@ -15,8 +15,8 @@ import {
 import { UserModel, User as UserType } from './models'
 import {
   TokenGenerator,
-  signInVerifiedUser,
-  addTokensToCookies
+  getValidatedUser,
+  signInHelper
 } from './utils'
 
 export const Email = asNexusMethod(EmailAddress, 'email')
@@ -85,11 +85,26 @@ export const mutation = extendType({
       },
       resolve: async (
         _,
-        { email, password, cookies }
+        { email, password, cookies = false },
+        { models, res, tokenGenerator }: AuthContext
       ): Promise<
         NexusGenRootTypes['AuthPayload'] | null
       > => {
-        return await null
+        const { _id, count } = await getValidatedUser(
+          email,
+          password,
+          models.users
+        )
+
+        // ToDo: Update count with new refresh token issue
+
+        return signInHelper(
+          _id,
+          count,
+          tokenGenerator,
+          res,
+          cookies
+        )
       }
     })
 
@@ -123,26 +138,13 @@ export const mutation = extendType({
           password
         )
 
-        const {
-          refreshToken,
-          accessToken
-        } = signInVerifiedUser(
-          _id.toString(),
+        return signInHelper(
+          _id,
           count,
-          tokenGenerator
+          tokenGenerator,
+          res,
+          cookies
         )
-
-        if (cookies)
-          addTokensToCookies(
-            { accessToken, refreshToken },
-            res
-          )
-
-        return {
-          refreshToken,
-          accessToken,
-          count
-        }
       }
     })
   }
