@@ -10,7 +10,7 @@ import {
   ClientRequest as Request
 } from 'http'
 
-import { UserModel } from './models'
+import { UserModel, User as UserType } from './models'
 import {
   TokenGenerator,
   signInVerifiedUser,
@@ -45,8 +45,14 @@ export const Query = extendType({
     t.field('me', {
       type: User,
       nullable: true,
-      resolve(): NexusGenRootTypes['User'] | null {
-        return null
+      resolve(
+        _,
+        __,
+        { user }: { user: UserType }
+      ): NexusGenRootTypes['User'] | null {
+        return !!user
+          ? { ...user, id: user._id.toString() }
+          : null
       }
     })
   }

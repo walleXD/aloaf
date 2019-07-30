@@ -8,10 +8,8 @@ import {
 import { ApolloServer } from 'apollo-server-micro'
 import {
   ServerResponse as Response,
-  ClientRequest as Request
+  IncomingMessage as Request
 } from 'http'
-
-import { parse } from 'cookie'
 
 import initDB, { generateEntities, DBConfig } from './db'
 import generateModels, { Models } from './models'
@@ -19,7 +17,9 @@ import generateSchema from './schema'
 
 import {
   TokenGenerator,
-  tokenGeneratorWithSecrets as tokeGenerator
+  tokenGeneratorWithSecrets as tokeGenerator,
+  User,
+  getActiveUserId
 } from './modules/auth'
 
 interface GenerateContextOpts {
@@ -34,6 +34,7 @@ interface Context {
   req: Request
   models: Models
   tokenGenerator: TokenGenerator
+  userId: User['_id'] | null
 }
 
 const generateContext = async ({
@@ -45,7 +46,8 @@ const generateContext = async ({
   res,
   req,
   models,
-  tokenGenerator
+  tokenGenerator,
+  userId: getActiveUserId(req, accessSecret)
 })
 
 const initServer = (context: Context): ApolloServer =>

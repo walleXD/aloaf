@@ -1,6 +1,8 @@
-import { sign } from 'jsonwebtoken'
-import { ServerResponse } from 'http'
-import { serialize } from 'cookie'
+import { sign, verify } from 'jsonwebtoken'
+import { ServerResponse, IncomingMessage } from 'http'
+import { serialize, parse } from 'cookie'
+import { User } from './models'
+import { ObjectId } from 'mongodb'
 
 const tokenGenerator = (
   data: Record<string, string | number>,
@@ -61,4 +63,24 @@ export const addTokensToCookies = (
       maxAge: 60 * 60 * 15
     })
   ])
+}
+
+export const getActiveUserId = (
+  req: IncomingMessage,
+  accessTokenSecret: string
+): User['_id'] | null => {
+  // ToDo: Add support for extracting tokens from header
+  const cookies = parse(req.headers.cookie || '')
+  // const refreshToken = cookies['refresh-token']
+  const accessToken = cookies['access-token']
+
+  try {
+    const { userId } = verify(
+      accessToken,
+      accessTokenSecret
+    ) as { userId: string }
+    return new ObjectId(userId)
+  } catch (e) {
+    return null
+  }
 }
