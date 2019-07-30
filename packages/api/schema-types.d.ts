@@ -4,9 +4,17 @@
  */
 
 
-
-
-
+import { core } from "nexus"
+declare global {
+  interface NexusGenCustomInputMethods<TypeName extends string> {
+    email<FieldName extends string>(fieldName: FieldName, opts?: core.ScalarInputFieldConfig<core.GetGen3<"inputTypes", TypeName, FieldName>>): void // "EmailAddress";
+  }
+}
+declare global {
+  interface NexusGenCustomOutputMethods<TypeName extends string> {
+    email<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void // "EmailAddress";
+  }
+}
 
 declare global {
   interface NexusGen extends NexusGenTypes {}
@@ -28,7 +36,7 @@ export interface NexusGenRootTypes {
   Query: {};
   User: { // root type
     count: number; // Int!
-    email: string; // String!
+    email: any; // EmailAddress!
     id: string; // ID!
   }
   String: string;
@@ -36,6 +44,7 @@ export interface NexusGenRootTypes {
   Float: number;
   Boolean: boolean;
   ID: string;
+  EmailAddress: any;
 }
 
 export interface NexusGenAllTypes extends NexusGenRootTypes {
@@ -57,7 +66,7 @@ export interface NexusGenFieldTypes {
   }
   User: { // field return type
     count: number; // Int!
-    email: string; // String!
+    email: any; // EmailAddress!
     id: string; // ID!
   }
 }
@@ -90,7 +99,7 @@ export type NexusGenEnumNames = never;
 
 export type NexusGenInterfaceNames = never;
 
-export type NexusGenScalarNames = "Boolean" | "Float" | "ID" | "Int" | "String";
+export type NexusGenScalarNames = "Boolean" | "EmailAddress" | "Float" | "ID" | "Int" | "String";
 
 export type NexusGenUnionNames = never;
 

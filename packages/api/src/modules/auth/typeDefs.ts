@@ -2,26 +2,31 @@ import {
   objectType,
   extendType,
   stringArg,
-  booleanArg
+  booleanArg,
+  asNexusMethod
 } from 'nexus'
+import { EmailAddress } from 'graphql-scalars'
 import { NexusGenRootTypes } from 'api/schema-types'
 import {
   ServerResponse as Response,
   ClientRequest as Request
 } from 'http'
 
-import { UserModel, User as UserType } from './models'
+import { UserModel } from './models'
 import {
   TokenGenerator,
   signInVerifiedUser,
   addTokensToCookies
 } from './utils'
+import { ObjectID } from 'bson'
+
+export const Email = asNexusMethod(EmailAddress, 'email')
 
 export const User = objectType({
   name: 'User',
   definition(t): void {
     t.id('id', { description: 'Id of the user' })
-    t.string('email', {
+    t.email('email', {
       description: "User's email"
     })
     t.int('count')
@@ -45,14 +50,15 @@ export const Query = extendType({
     t.field('me', {
       type: User,
       nullable: true,
-      resolve(
+      async resolve(
         _,
         __,
-        { user }: { user: UserType }
-      ): NexusGenRootTypes['User'] | null {
-        return !!user
-          ? { ...user, id: user._id.toString() }
-          : null
+        { userId, models }: AuthContext
+      ): Promise<NexusGenRootTypes['User'] | null> {
+        if (!userId) return null
+        const user = await models.users.findUserById(userId)
+        if (!user) return null
+        return { ...user, id: user._id.toString() }
       }
     })
   }
@@ -64,6 +70,7 @@ interface AuthContext {
   models: {
     users: UserModel
   }
+  userId: ObjectID
   tokenGenerator: TokenGenerator
 }
 

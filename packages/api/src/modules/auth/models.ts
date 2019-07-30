@@ -10,9 +10,18 @@ export interface User {
   count: number
 }
 
+interface FindUserSelectors {
+  email?: string
+  id?: ObjectID
+}
+
 export interface UserModel {
   isUser: (email: string) => Promise<boolean>
-  findUser: (email: string) => Promise<User | null>
+  findUserByEmail: (email: string) => Promise<User | null>
+  findUserById: (_id: ObjectID) => Promise<User | null>
+  findUser: (
+    selectors: FindUserSelectors
+  ) => Promise<User | null>
   createNewUser: (
     email: string,
     password: string
@@ -22,20 +31,21 @@ export interface UserModel {
 export const generateUserModel = (
   users: MongoEntity<User>
 ): UserModel => {
-  const findUser = async (
+  const findUserByEmail = async (
     email: string
-  ): Promise<User | null> => {
-    const user = await users.findOne({ email })
-    console.log(user)
-    return user
-  }
+  ): Promise<User | null> => users.findOne({ email })
 
-  const isUser = async (
-    email: string
-  ): Promise<boolean> => {
-    const user = await findUser(email)
-    return !!user
-  }
+  const findUserById = async (
+    _id: ObjectID
+  ): Promise<User | null> => users.findOne({ _id })
+
+  const findUser = async ({
+    email = '',
+    id
+  }: FindUserSelectors): Promise<User | null> =>
+    id ? findUserById(id) : findUserByEmail(email)
+  const isUser = async (email: string): Promise<boolean> =>
+    !!(await findUserByEmail(email))
 
   const createNewUser = async (
     email: string,
@@ -58,6 +68,8 @@ export const generateUserModel = (
   return Object.freeze({
     isUser,
     findUser,
+    findUserByEmail,
+    findUserById,
     createNewUser
   })
 }
