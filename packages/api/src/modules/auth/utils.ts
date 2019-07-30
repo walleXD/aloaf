@@ -191,10 +191,10 @@ export const signInHelper = (
 
 /**
  * Validates user info for login
- * @param email User's email
- * @param password User's password
- * @param users Users Collection model
- * @returns user object from DB
+ * @param {string} email User's email
+ * @param {string} password User's password
+ * @param {UserModel} users Users Collection model
+ * @returns {User} user object from DB
  */
 export const getValidatedUser = async (
   email: string,

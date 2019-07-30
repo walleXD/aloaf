@@ -42,6 +42,9 @@ const User = objectType({
   }
 })
 
+/**
+ * Payload sent to users after successful authentication
+ */
 const AuthPayload = objectType({
   name: 'AuthPayload',
   description:
@@ -53,17 +56,22 @@ const AuthPayload = objectType({
   }
 })
 
+/**
+ * Query in Auth module
+ */
 const Query = extendType({
   type: 'Query',
   definition(t): void {
     t.field('me', {
       type: User,
+      description: 'Returns the currently logged in used',
       nullable: true,
       async resolve(
         _,
         __,
         { user }: AuthContext
       ): Promise<NexusGenRootTypes['User'] | null> {
+        // checks context for user object otherwise returns null
         return !user
           ? null
           : { ...user, id: user._id.toString() }
@@ -72,10 +80,15 @@ const Query = extendType({
   }
 })
 
+/**
+ * Mutation in Auth Module
+ */
 const Mutation = extendType({
   type: 'Mutation',
   definition(t): void {
     t.field('signIn', {
+      description:
+        'Allows existing user to sign in with their info',
       type: AuthPayload,
       nullable: true,
       args: {
@@ -90,6 +103,7 @@ const Mutation = extendType({
       ): Promise<
         NexusGenRootTypes['AuthPayload'] | null
       > => {
+        // validates the user info is correct
         const { _id, count } = await getValidatedUser(
           email,
           password,
@@ -98,6 +112,7 @@ const Mutation = extendType({
 
         // ToDo: Update count with new refresh token issue
 
+        // uses the validated user info to generate JWT tokens
         return signInHelper(
           _id,
           count,
@@ -109,6 +124,7 @@ const Mutation = extendType({
     })
 
     t.field('signUp', {
+      description: 'Allows new users to sign up',
       type: AuthPayload,
       nullable: true,
       args: {
@@ -123,13 +139,14 @@ const Mutation = extendType({
       ): Promise<
         NexusGenRootTypes['AuthPayload'] | null
       > => {
+        // checks if the user already exists
         const isUser = await models.users.isUser(email)
         if (isUser)
           throw new Error(
             `User with ${email} already exists`
           )
 
-        // brand new user
+        // creates brand new user
         const {
           count,
           _id
@@ -138,6 +155,7 @@ const Mutation = extendType({
           password
         )
 
+        // generates tokens to sign in the new user
         return signInHelper(
           _id,
           count,
