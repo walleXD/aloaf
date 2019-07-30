@@ -6,7 +6,6 @@ import {
   asNexusMethod
 } from 'nexus'
 import { EmailAddress } from 'graphql-scalars'
-import { NexusGenRootTypes } from 'api/schema-types'
 import {
   ServerResponse as Response,
   ClientRequest as Request
@@ -18,10 +17,21 @@ import {
   getValidatedUser,
   signInHelper
 } from './utils'
+import { NexusGenRootTypes } from 'api/schema-types'
 
-export const Email = asNexusMethod(EmailAddress, 'email')
+interface AuthContext {
+  res: Response
+  req: Request
+  models: {
+    users: UserModel
+  }
+  user: UserType | null
+  tokenGenerator: TokenGenerator
+}
 
-export const User = objectType({
+const Email = asNexusMethod(EmailAddress, 'email')
+
+const User = objectType({
   name: 'User',
   definition(t): void {
     t.id('id', { description: 'Id of the user' })
@@ -32,7 +42,7 @@ export const User = objectType({
   }
 })
 
-export const AuthPayload = objectType({
+const AuthPayload = objectType({
   name: 'AuthPayload',
   description:
     'Payload sent to users after successful authentication',
@@ -43,7 +53,7 @@ export const AuthPayload = objectType({
   }
 })
 
-export const Query = extendType({
+const Query = extendType({
   type: 'Query',
   definition(t): void {
     t.field('me', {
@@ -62,17 +72,7 @@ export const Query = extendType({
   }
 })
 
-interface AuthContext {
-  res: Response
-  req: Request
-  models: {
-    users: UserModel
-  }
-  user: UserType | null
-  tokenGenerator: TokenGenerator
-}
-
-export const mutation = extendType({
+const Mutation = extendType({
   type: 'Mutation',
   definition(t): void {
     t.field('signIn', {
@@ -149,3 +149,13 @@ export const mutation = extendType({
     })
   }
 })
+
+export const AuthTypes = {
+  Email,
+  User,
+  AuthPayload,
+  Query,
+  Mutation
+}
+
+export const AuthPermissions = {}
