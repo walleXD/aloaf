@@ -8,9 +8,9 @@
     "sourceMap": true,
 
     "isolatedModules": false,
-    "declaration": false,
+    "declaration": true,
     "composite": false,
-    "declarationMap": false
+    "declarationMap": true
   },
   "references": [
     {
