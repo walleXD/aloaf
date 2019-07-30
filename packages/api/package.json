@@ -6,6 +6,7 @@
   "private": true,
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
+    "@types/cookie": "^0.3.3",
     "@types/dotenv": "^6.1.1",
     "@types/jsonwebtoken": "^8.3.2",
     "@types/lodash": "^4.14.136",
@@ -35,6 +36,7 @@
     "apollo-server-micro": "^2.7.0",
     "bcrypt": "^3.0.6",
     "bcryptjs": "^2.4.3",
+    "cookie": "^0.4.0",
     "graphql": "^14.4.2",
     "graphql-middleware": "^3.0.3",
     "graphql-shield": "^6.0.4",

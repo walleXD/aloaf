@@ -5,10 +5,17 @@ import {
   booleanArg
 } from 'nexus'
 import { NexusGenRootTypes } from 'api/schema-types'
-import { Request, Response } from 'apollo-server-env'
+import {
+  ServerResponse as Response,
+  ClientRequest as Request
+} from 'http'
 
 import { UserModel } from './models'
-import { TokenGenerator, signInVerifiedUser } from './utils'
+import {
+  TokenGenerator,
+  signInVerifiedUser,
+  addTokensToCookies
+} from './utils'
 
 export const User = objectType({
   name: 'User',
@@ -85,8 +92,8 @@ export const mutation = extendType({
       },
       resolve: async (
         _,
-        { email, password, cookies },
-        { models, tokenGenerator }: AuthContext
+        { email, password, cookies = false },
+        { models, tokenGenerator, res }: AuthContext
       ): Promise<
         NexusGenRootTypes['AuthPayload'] | null
       > => {
@@ -95,28 +102,36 @@ export const mutation = extendType({
           throw new Error(
             `User with ${email} already exists`
           )
-        const user = await models.users.createNewUser(
+
+        // brand new user
+        const {
+          count,
+          _id
+        } = await models.users.createNewUser(
           email,
           password
         )
-        if (user) {
-          const { count, _id } = user
-          const {
-            refreshToken,
-            accessToken
-          } = signInVerifiedUser(
-            _id.toString(),
-            count,
-            tokenGenerator
+
+        const {
+          refreshToken,
+          accessToken
+        } = signInVerifiedUser(
+          _id.toString(),
+          count,
+          tokenGenerator
+        )
+
+        if (cookies)
+          addTokensToCookies(
+            { accessToken, refreshToken },
+            res
           )
 
-          return {
-            accessToken,
-            refreshToken,
-            count
-          }
+        return {
+          refreshToken,
+          accessToken,
+          count
         }
-        return null
       }
     })
   }

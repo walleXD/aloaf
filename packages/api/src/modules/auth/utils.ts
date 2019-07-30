@@ -1,4 +1,6 @@
 import { sign } from 'jsonwebtoken'
+import { ServerResponse } from 'http'
+import { serialize } from 'cookie'
 
 const tokenGenerator = (
   data: Record<string, string | number>,
@@ -46,3 +48,17 @@ export const signInVerifiedUser = (
   accessToken: tokenGenerator.accessToken(userId),
   refreshToken: tokenGenerator.refreshToken(userId, count)
 })
+
+export const addTokensToCookies = (
+  { accessToken, refreshToken }: AuthTokens,
+  res: ServerResponse
+): void => {
+  res.setHeader('Set-Cookie', [
+    serialize('refresh-token', refreshToken, {
+      maxAge: 60 * 60 * 24 * 7
+    }),
+    serialize('access-token', accessToken, {
+      maxAge: 60 * 60 * 15
+    })
+  ])
+}

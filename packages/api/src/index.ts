@@ -6,7 +6,12 @@ import {
   refreshSecret
 } from './env'
 import { ApolloServer } from 'apollo-server-micro'
-import { Request, Response } from 'apollo-server-env'
+import {
+  ServerResponse as Response,
+  ClientRequest as Request
+} from 'http'
+
+import { parse } from 'cookie'
 
 import initDB, { generateEntities, DBConfig } from './db'
 import generateModels, { Models } from './models'
