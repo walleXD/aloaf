@@ -91,14 +91,14 @@ const bootstrap = async (
   res: Response
 ): Promise<void> =>
   pipe(
-    initDB,
-    generateEntities,
-    generateContextGenerator,
+    initDB, // 1
+    generateEntities, // 2
+    generateContextGenerator, // 3
     (contextGenerator): Promise<Context> =>
-      contextGenerator(req, res),
-    initServer,
-    generateServerHandler,
-    (handler): Promise<void> => handler(req, res)
+      contextGenerator(req, res), // 3
+    initServer, // 4
+    generateServerHandler, // 5
+    (handler): Promise<void> => handler(req, res) // 5
   )(dBConfigs)
 
 module.exports = bootstrap
