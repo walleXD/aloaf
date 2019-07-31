@@ -3,14 +3,15 @@ import {
   extendType,
   stringArg,
   booleanArg,
-  asNexusMethod
+  asNexusMethod,
+  queryField,
+  mutationField
 } from 'nexus'
 import { EmailAddress } from 'graphql-scalars'
 import {
   ServerResponse as Response,
   ClientRequest as Request
 } from 'http'
-
 import { UserModel, User as UserType } from './models'
 import {
   TokenGenerator,
@@ -57,114 +58,98 @@ const AuthPayload = objectType({
 })
 
 /**
- * Query in Auth module
+ * Returns the currently logged in used
  */
-const Query = extendType({
-  type: 'Query',
-  definition(t): void {
-    t.field('me', {
-      type: User,
-      description: 'Returns the currently logged in used',
-      nullable: true,
-      async resolve(
-        _,
-        __,
-        { user }: AuthContext
-      ): Promise<NexusGenRootTypes['User'] | null> {
-        // checks context for user object otherwise returns null
-        return !user
-          ? null
-          : { ...user, id: user._id.toString() }
-      }
-    })
+const meQueryField = queryField('me', {
+  type: User,
+  description: 'Returns the currently logged in used',
+  nullable: true,
+  async resolve(
+    _,
+    __,
+    { user }: AuthContext
+  ): Promise<NexusGenRootTypes['User'] | null> {
+    // checks context for user object otherwise returns null
+    return !user
+      ? null
+      : { ...user, id: user._id.toString() }
   }
 })
 
 /**
- * Mutation in Auth Module
+ * Allows new users to sign up
  */
-const Mutation = extendType({
-  type: 'Mutation',
-  definition(t): void {
-    t.field('signIn', {
-      description:
-        'Allows existing user to sign in with their info',
-      type: AuthPayload,
-      nullable: true,
-      args: {
-        email: stringArg({ required: true }),
-        password: stringArg({ required: true }),
-        cookies: booleanArg()
-      },
-      resolve: async (
-        _,
-        { email, password, cookies = false },
-        { models, res, tokenGenerator }: AuthContext
-      ): Promise<
-        NexusGenRootTypes['AuthPayload'] | null
-      > => {
-        // validates the user info is correct
-        const { _id, count } = await getValidatedUser(
-          email,
-          password,
-          models.users
-        )
+const signUpMutation = mutationField('signUp', {
+  description: 'Allows new users to sign up',
+  type: AuthPayload,
+  nullable: true,
+  args: {
+    email: stringArg({ required: true }),
+    password: stringArg({ required: true }),
+    cookies: booleanArg()
+  },
+  resolve: async (
+    _,
+    { email, password, cookies = false },
+    { models, tokenGenerator, res }: AuthContext
+  ): Promise<NexusGenRootTypes['AuthPayload'] | null> => {
+    // checks if the user already exists
+    const isUser = await models.users.isUser(email)
+    if (isUser)
+      throw new Error(`User with ${email} already exists`)
 
-        // ToDo: Update count with new refresh token issue
+    // creates brand new user
+    const { count, _id } = await models.users.createNewUser(
+      email,
+      password
+    )
 
-        // uses the validated user info to generate JWT tokens
-        return signInHelper(
-          _id,
-          count,
-          tokenGenerator,
-          res,
-          cookies
-        )
-      }
-    })
+    // generates tokens to sign in the new user
+    return signInHelper(
+      _id,
+      count,
+      tokenGenerator,
+      res,
+      cookies
+    )
+  }
+})
 
-    t.field('signUp', {
-      description: 'Allows new users to sign up',
-      type: AuthPayload,
-      nullable: true,
-      args: {
-        email: stringArg({ required: true }),
-        password: stringArg({ required: true }),
-        cookies: booleanArg()
-      },
-      resolve: async (
-        _,
-        { email, password, cookies = false },
-        { models, tokenGenerator, res }: AuthContext
-      ): Promise<
-        NexusGenRootTypes['AuthPayload'] | null
-      > => {
-        // checks if the user already exists
-        const isUser = await models.users.isUser(email)
-        if (isUser)
-          throw new Error(
-            `User with ${email} already exists`
-          )
+/**
+ * Allows existing user to sign in with their info
+ */
+const signInMutation = mutationField('signIn', {
+  description:
+    'Allows existing user to sign in with their info',
+  type: AuthPayload,
+  nullable: true,
+  args: {
+    email: stringArg({ required: true }),
+    password: stringArg({ required: true }),
+    cookies: booleanArg()
+  },
+  resolve: async (
+    _,
+    { email, password, cookies = false },
+    { models, res, tokenGenerator }: AuthContext
+  ): Promise<NexusGenRootTypes['AuthPayload'] | null> => {
+    // validates the user info is correct
+    const { _id, count } = await getValidatedUser(
+      email,
+      password,
+      models.users
+    )
 
-        // creates brand new user
-        const {
-          count,
-          _id
-        } = await models.users.createNewUser(
-          email,
-          password
-        )
+    // ToDo: Update count with new refresh token issue
 
-        // generates tokens to sign in the new user
-        return signInHelper(
-          _id,
-          count,
-          tokenGenerator,
-          res,
-          cookies
-        )
-      }
-    })
+    // uses the validated user info to generate JWT tokens
+    return signInHelper(
+      _id,
+      count,
+      tokenGenerator,
+      res,
+      cookies
+    )
   }
 })
 
@@ -172,8 +157,9 @@ export const AuthTypes = {
   Email,
   User,
   AuthPayload,
-  Query,
-  Mutation
+  meQueryField,
+  signInMutation,
+  signUpMutation
 }
 
 export const AuthPermissions = {}
