@@ -1,6 +1,5 @@
 import {
   objectType,
-  extendType,
   stringArg,
   booleanArg,
   asNexusMethod,
