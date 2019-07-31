@@ -21,17 +21,8 @@
     "rimraf": "^2.6.3",
     "typescript": "^3.5.3"
   },
-  "scripts": {
-    "start": "micro",
-    "build": "rimraf lib && tsc -b",
-    "dev:ts": "tsc -b --watch",
-    "dev:server": "micro-dev --watch ../ -p 4000",
-    "dev:debug": "node --inspect node_modules/.bin/micro-dev --watch ../ -p 4000",
-    "dev": "yarn build && concurrently \"yarn dev:ts\" \"yarn dev:server\""
-  },
   "dependencies": {
     "@loaf/mono-test": "*",
-    "@types/lru-cache": "^5.1.0",
     "apollo-connector-mongodb": "^2.0.3",
     "apollo-server-micro": "^2.7.0",
     "bcrypt": "^3.0.6",
@@ -49,5 +40,13 @@
     "micro": "^9.3.4",
     "nexus": "^0.12.0-beta.6",
     "ramda": "^0.26.1"
+  },
+  "scripts": {
+    "start": "micro",
+    "build": "rimraf lib && tsc -b",
+    "dev:ts": "tsc -b --watch",
+    "dev:server": "micro-dev --watch ../ -p 4000",
+    "dev:debug": "node --inspect node_modules/.bin/micro-dev --watch ../ -p 4000",
+    "dev": "yarn build && concurrently \"yarn dev:ts\" \"yarn dev:server\""
   }
 }

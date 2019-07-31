@@ -20,17 +20,10 @@ import generateModels, { Models } from './models'
 import generateSchema from './schema'
 import {
   TokenGenerator,
-  tokenGeneratorWithSecrets as tokeGenerator,
+  tokenGeneratorWithSecrets as tokenGenerator,
   User,
   getActiveUser
 } from './modules/auth'
-
-interface GenerateContextOpts {
-  res: Response
-  req: Request
-  models: Models
-  tokenGenerator: TokenGenerator
-}
 
 interface Context {
   res: Response
@@ -52,7 +45,7 @@ const generateContextGenerator = (
   res,
   req,
   models: generateModels(entities),
-  tokenGenerator: tokeGenerator(
+  tokenGenerator: tokenGenerator(
     accessSecret,
     refreshSecret
   ),

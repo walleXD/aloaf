@@ -1,5 +1,5 @@
-import React from 'react'
+import React, { ReactElement } from 'react'
 
-const IndexPage = () => <h1>Hello</h1>
+const IndexPage = (): ReactElement => <h1>Hello</h1>
 
 export default IndexPage
