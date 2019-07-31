@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import deepMerge from 'deepmerge'
 import { shield, IRules } from 'graphql-shield'
 import { IMiddlewareGenerator } from 'graphql-middleware'

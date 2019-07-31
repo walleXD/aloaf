@@ -10,17 +10,21 @@ import {
   ServerResponse as Response,
   IncomingMessage as Request
 } from 'http'
-
-import initDB, { generateEntities, DBConfig } from './db'
+import { pipe } from 'desmond'
+import initDB, {
+  generateEntities,
+  DBConfig,
+  AllEntities
+} from './db'
 import generateModels, { Models } from './models'
 import generateSchema from './schema'
-
 import {
   TokenGenerator,
   tokenGeneratorWithSecrets as tokeGenerator,
   User,
   getActiveUser
 } from './modules/auth'
+import { MongoConnector } from 'apollo-connector-mongodb'
 
 interface GenerateContextOpts {
   res: Response
@@ -63,7 +67,7 @@ const dBConfigs: DBConfig[] = [
   { name: 'DB2', url: mongoURL2 }
 ]
 
-// ToDo: rework into a compositional fn
+// ToDo: Improve compositional fn
 /**
  * Main fn which bootstraps and starts the server
  * Bootstrap process:
@@ -80,21 +84,27 @@ const bootstrap = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const DBs = await initDB(dBConfigs)
-  const entities = generateEntities(DBs)
+  const server = await pipe(
+    (): Promise<MongoConnector[]> => initDB(dBConfigs),
+    (DBs): AllEntities => generateEntities(DBs),
+    (entities): Promise<Context> =>
+      generateContext({
+        res,
+        req,
+        models: generateModels(entities),
+        tokenGenerator: tokeGenerator(
+          accessSecret,
+          refreshSecret
+        )
+      }),
+    (context): ApolloServer => initServer(context),
+    (
+      server
+    ): ((req: Request, res: Response) => Promise<void>) =>
+      server.createHandler()
+  )()
 
-  const context = await generateContext({
-    res,
-    req,
-    models: generateModels(entities),
-    tokenGenerator: tokeGenerator(
-      accessSecret,
-      refreshSecret
-    )
-  })
-  const server = initServer(context)
-
-  return server.createHandler()(req, res)
+  return server(req, res)
 }
 
 module.exports = bootstrap
