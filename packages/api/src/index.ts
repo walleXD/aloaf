@@ -24,7 +24,6 @@ import {
   User,
   getActiveUser
 } from './modules/auth'
-import { MongoConnector } from 'apollo-connector-mongodb'
 
 interface GenerateContextOpts {
   res: Response
@@ -41,17 +40,27 @@ interface Context {
   user: User | null
 }
 
-const generateContext = async ({
+const generateContextGenerator = (
+  entities: AllEntities
+): ((
+  req: Request,
+  res: Response
+) => Promise<Context>) => async (
+  req: Request,
+  res: Response
+): Promise<Context> => ({
   res,
   req,
-  models,
-  tokenGenerator
-}: GenerateContextOpts): Promise<Context> => ({
-  res,
-  req,
-  models,
-  tokenGenerator,
-  user: await getActiveUser(req, accessSecret, models)
+  models: generateModels(entities),
+  tokenGenerator: tokeGenerator(
+    accessSecret,
+    refreshSecret
+  ),
+  user: await getActiveUser(
+    req,
+    accessSecret,
+    generateModels(entities)
+  )
 })
 
 const initServer = (context: Context): ApolloServer =>
@@ -67,7 +76,11 @@ const dBConfigs: DBConfig[] = [
   { name: 'DB2', url: mongoURL2 }
 ]
 
-// ToDo: Improve compositional fn
+const generateServerHandler = (
+  server: ApolloServer
+): ((req: Request, res: Response) => Promise<void>) =>
+  server.createHandler()
+
 /**
  * Main fn which bootstraps and starts the server
  * Bootstrap process:
@@ -75,7 +88,7 @@ const dBConfigs: DBConfig[] = [
  *  2. Then collection entities are initiated
  *  3. Context for graphql server execution is generated
  *  4. Graphql server is initiated with context
- *  5. Server handle is returned so that micro can run the server
+ *  5. Server handler is generated & server is initiated
  * @param req Incoming request from client
  * @param res Outgoing response to client
  * @returns Handler function which micro can consume to start server
@@ -83,28 +96,16 @@ const dBConfigs: DBConfig[] = [
 const bootstrap = async (
   req: Request,
   res: Response
-): Promise<void> => {
-  const server = await pipe(
-    (): Promise<MongoConnector[]> => initDB(dBConfigs),
-    (DBs): AllEntities => generateEntities(DBs),
-    (entities): Promise<Context> =>
-      generateContext({
-        res,
-        req,
-        models: generateModels(entities),
-        tokenGenerator: tokeGenerator(
-          accessSecret,
-          refreshSecret
-        )
-      }),
-    (context): ApolloServer => initServer(context),
-    (
-      server
-    ): ((req: Request, res: Response) => Promise<void>) =>
-      server.createHandler()
-  )()
-
-  return server(req, res)
-}
+): Promise<void> =>
+  pipe(
+    initDB,
+    generateEntities,
+    generateContextGenerator,
+    (contextGenerator): Promise<Context> =>
+      contextGenerator(req, res),
+    initServer,
+    generateServerHandler,
+    (handler): Promise<void> => handler(req, res)
+  )(dBConfigs)
 
 module.exports = bootstrap
