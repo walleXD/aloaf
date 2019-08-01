@@ -30,15 +30,30 @@ export interface UserModel {
 export const generateUserModel = (
   users: MongoEntity<User>
 ): UserModel => {
+  /**
+   * Looks up user using email
+   * @param email Email to find user with
+   * @returns user info
+   */
   const findUserByEmail = async (
     email: string
   ): Promise<User | null> => users.findOne({ email })
 
+  /**
+   * Looks up user with id
+   * @param id Id to find user with
+   * @returns user info
+   */
   const findUserById = async (
     id: string
   ): Promise<User | null> =>
     users.findOne({ _id: new ObjectID(id) })
 
+  /**
+   * Finds users using the given info
+   * @param param0 selectors to find users with
+   * @returns user info
+   */
   const findUser = async ({
     email = '',
     id
@@ -49,6 +64,12 @@ export const generateUserModel = (
   const isUser = async (email: string): Promise<boolean> =>
     !!(await findUserByEmail(email))
 
+  /**
+   * Creates new user and enters it into DB
+   * @param email new user's email
+   * @param password user to generate hash for the user
+   * @returns user info
+   */
   const createNewUser = async (
     email: string,
     password: string

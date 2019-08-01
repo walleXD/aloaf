@@ -109,7 +109,7 @@ const signUpMutation = mutationField('signUp', {
       count,
       tokenGenerator,
       res,
-      cookies
+      Boolean(cookies)
     )
   }
 })
@@ -147,7 +147,7 @@ const signInMutation = mutationField('signIn', {
       count,
       tokenGenerator,
       res,
-      cookies
+      Boolean(cookies)
     )
   }
 })

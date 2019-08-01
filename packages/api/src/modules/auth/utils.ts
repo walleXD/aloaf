@@ -2,7 +2,7 @@ import { sign, verify } from 'jsonwebtoken'
 import { ServerResponse, IncomingMessage } from 'http'
 import { serialize, parse } from 'cookie'
 import { User, UserModel } from './models'
-import { ObjectId, ObjectID } from 'mongodb'
+import { ObjectID } from 'mongodb'
 import { compare } from 'bcryptjs'
 
 /**
@@ -189,7 +189,7 @@ export const signInHelper = (
   count: number,
   tokenGenerator: TokenGenerator,
   res: ServerResponse,
-  useCookies: boolean | null
+  useCookies: boolean
 ): {
   refreshToken: string
   accessToken: string
