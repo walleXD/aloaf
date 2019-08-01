@@ -67,6 +67,7 @@ export const tokenGeneratorWithSecrets = (
     refreshToken: (userId: string, count: number): string =>
       refreshTokenGenerator(userId, count, refreshSecret)
   })
+
 /**
  * Object with access and refresh tokens
  * @typedef AuthTokens
@@ -112,45 +113,66 @@ export const addTokensToCookies = (
 }
 
 /**
- * Extract user Id from client request, if any available
- * @param req Request coming from client
- * @param accessTokenSecret Secret used to encode and decode info from access token
- * @returns User's Id based on token from client
- */
-export const getActiveUserId = (
-  req: IncomingMessage,
-  accessTokenSecret: string
-): User['_id'] | null => {
-  // ToDo: Add support for extracting tokens from header
-  const cookies = parse(req.headers.cookie || '')
-  // const refreshToken = cookies['refresh-token']
-  const accessToken = cookies['access-token']
-
-  try {
-    const { userId } = verify(
-      accessToken,
-      accessTokenSecret
-    ) as { userId: string }
-    return new ObjectId(userId)
-  } catch (e) {
-    return null
-  }
-}
-
-/**
  * Extracts user info from req and returns user from DB
  * @param req Request coming from client
- * @param accessTokenSecret Secret used to encode and decode info from access token
+ * @param accessTokenSecret Secret used to encode and decode access token
+ * @param refreshTokenSecret Secret used to encode & decode refresh token
  * @param models Data model
  * @returns User from DB based on request tokens, if one exists
  */
 export const getActiveUser = async (
   req: IncomingMessage,
+  res: ServerResponse,
   accessTokenSecret: string,
+  refreshTokenSecret: string,
   models: { users: UserModel }
 ): Promise<User | null> => {
-  const userId = getActiveUserId(req, accessTokenSecret)
-  return userId && models.users.findUserById(userId)
+  // 1. extract tokens
+  const cookies = parse(req.headers.cookie || ''),
+    oldAccessToken = cookies['access-token'],
+    oldRefreshToken = cookies['refresh-token']
+
+  if (!oldAccessToken && !oldRefreshToken) return null
+
+  // 2. extract userId from accessToken
+  // 3. get user info & return
+  try {
+    const { userId } = verify(
+      oldAccessToken,
+      accessTokenSecret
+    ) as { userId: string }
+    return models.users.findUserById(userId)
+  } catch (e) {}
+
+  // 4. If accessToken not valid, extract userId from refreshToken
+  try {
+    const { userId, count } = verify(
+      oldRefreshToken,
+      refreshTokenSecret
+    ) as { userId: string; count: number }
+    const user = await models.users.findUserById(userId)
+
+    if (user && count === user.count) {
+      const tokenGenerator = tokenGeneratorWithSecrets(
+        accessTokenSecret,
+        refreshTokenSecret
+      )
+      const accessToken = tokenGenerator.accessToken(
+        user._id.toHexString()
+      )
+
+      const refreshToken = tokenGenerator.refreshToken(
+        user._id.toHexString(),
+        user.count
+      )
+
+      addTokensToCookies({ accessToken, refreshToken }, res)
+
+      return user
+    }
+  } catch (e) {}
+
+  return null
 }
 
 /**

@@ -51,7 +51,9 @@ const generateContextGenerator = (
   ),
   user: await getActiveUser(
     req,
+    res,
     accessSecret,
+    refreshSecret,
     generateModels(entities)
   )
 })

@@ -17,7 +17,7 @@ interface FindUserSelectors {
 export interface UserModel {
   isUser: (email: string) => Promise<boolean>
   findUserByEmail: (email: string) => Promise<User | null>
-  findUserById: (_id: ObjectID) => Promise<User | null>
+  findUserById: (id: string) => Promise<User | null>
   findUser: (
     selectors: FindUserSelectors
   ) => Promise<User | null>
@@ -35,14 +35,17 @@ export const generateUserModel = (
   ): Promise<User | null> => users.findOne({ email })
 
   const findUserById = async (
-    _id: ObjectID
-  ): Promise<User | null> => users.findOne({ _id })
+    id: string
+  ): Promise<User | null> =>
+    users.findOne({ _id: new ObjectID(id) })
 
   const findUser = async ({
     email = '',
     id
   }: FindUserSelectors): Promise<User | null> =>
-    id ? findUserById(id) : findUserByEmail(email)
+    id
+      ? findUserById(id.toHexString())
+      : findUserByEmail(email)
   const isUser = async (email: string): Promise<boolean> =>
     !!(await findUserByEmail(email))
 
