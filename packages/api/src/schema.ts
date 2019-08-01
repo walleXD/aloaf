@@ -13,7 +13,14 @@ export const generateSchema = (): NexusSchema =>
     outputs: {
       schema: join(__dirname, '../../../schema.graphql'),
       typegen: join(__dirname, '../schema-types.d.ts')
-    }
+    },
+    prettierConfig: join(
+      __dirname,
+      '..',
+      '..',
+      '..',
+      '.prettierrc'
+    )
   })
 
 const permissions = generatePermissions(AuthPermissions)
