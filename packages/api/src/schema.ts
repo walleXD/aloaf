@@ -4,7 +4,7 @@ import { join } from 'path'
 import { applyMiddleware } from 'graphql-middleware'
 
 import { PlayThingTypes } from './modules/playThing'
-import { AuthTypes, AuthPermissions } from './modules/auth'
+import { AuthTypes, AuthPermissions } from '@loaf/auth'
 import { generatePermissions } from './utils'
 
 export const generateSchema = (): NexusSchema =>

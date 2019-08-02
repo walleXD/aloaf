@@ -23,7 +23,7 @@ import {
   tokenGeneratorWithSecrets as tokenGenerator,
   User,
   getActiveUser
-} from './modules/auth'
+} from '@loaf/auth'
 
 interface Context {
   res: Response

@@ -11,6 +11,9 @@
     },
     {
       "path": "packages/mono-test"
+    },
+    {
+      "path": "packages/auth"
     }
   ],
   "settings": {

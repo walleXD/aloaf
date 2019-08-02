@@ -4,7 +4,7 @@ import {
 } from 'apollo-connector-mongodb'
 import lruCache from 'lru-cache'
 
-import { User } from './modules/auth'
+import { User } from '@loaf/auth'
 export interface DBConfig {
   name: string
   url: string

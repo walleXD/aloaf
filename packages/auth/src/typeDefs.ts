@@ -19,7 +19,7 @@ import {
   getValidatedUser,
   signInHelper
 } from './utils'
-import { NexusGenRootTypes } from 'api/schema-types'
+import { NexusGenRootTypes } from 'auth/generated/auth.schema-types'
 import {
   isAuthenticated,
   notAuthenticated

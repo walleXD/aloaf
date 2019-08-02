@@ -1,7 +1,4 @@
-import {
-  generateUserModel,
-  UserModel
-} from './modules/auth'
+import { generateUserModel, UserModel } from '@loaf/auth'
 import { AllEntities } from './db'
 
 export interface Models {
