@@ -11,6 +11,8 @@ import {
   ServerResponse as Response,
   ClientRequest as Request
 } from 'http'
+import { ObjectId } from 'bson'
+
 import { UserModel, User as UserType } from './models'
 import {
   TokenGenerator,
@@ -18,7 +20,10 @@ import {
   signInHelper
 } from './utils'
 import { NexusGenRootTypes } from 'api/schema-types'
-import { ObjectId } from 'bson'
+import {
+  isAuthenticated,
+  notAuthenticated
+} from './permissionRules'
 
 interface AuthContext {
   res: Response
@@ -60,7 +65,7 @@ const AuthPayload = objectType({
 /**
  * Returns the currently logged in used
  */
-const meQueryField = queryField('me', {
+const meQuery = queryField('me', {
   type: User,
   description: 'Returns the currently logged in used',
   nullable: true,
@@ -154,6 +159,8 @@ const signInMutation = mutationField('signIn', {
 const refreshTokensMutation = mutationField(
   'refreshTokens',
   {
+    description:
+      'Allows existing user to get new access tokens with their refresh tokens',
     type: AuthPayload,
     nullable: true,
     args: {
@@ -189,6 +196,8 @@ const refreshTokensMutation = mutationField(
 const invalidateTokensMutation = mutationField(
   'invalidateTokens',
   {
+    description:
+      "Invalidates existing user's refresh tokens",
     type: 'Boolean',
     nullable: false,
     resolve: async (
@@ -213,11 +222,21 @@ export const AuthTypes = {
   Email,
   User,
   AuthPayload,
-  meQueryField,
+  meQuery,
   signInMutation,
   signUpMutation,
   refreshTokensMutation,
   invalidateTokensMutation
 }
 
-export const AuthPermissions = {}
+export const AuthPermissions = {
+  Query: {
+    me: isAuthenticated
+  },
+  Mutation: {
+    signIn: notAuthenticated,
+    signUp: notAuthenticated,
+    refreshTokens: notAuthenticated,
+    invalidateTokens: isAuthenticated
+  }
+}

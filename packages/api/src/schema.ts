@@ -23,9 +23,13 @@ export const generateSchema = (): NexusSchema =>
     )
   })
 
-const permissions = generatePermissions(AuthPermissions)
+export default (): NexusSchema => {
+  const defaultMiddlewares = [
+    generatePermissions(AuthPermissions)
+  ]
 
-const defaultMiddlewares = [permissions]
-
-export default (): NexusSchema =>
-  applyMiddleware(generateSchema(), ...defaultMiddlewares)
+  return applyMiddleware(
+    generateSchema(),
+    ...defaultMiddlewares
+  )
+}
