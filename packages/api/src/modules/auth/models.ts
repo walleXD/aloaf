@@ -15,16 +15,48 @@ interface FindUserSelectors {
 }
 
 export interface UserModel {
+  /**
+   * Looks up whether user exists with the given email
+   * @param email
+   * @returns whether the use exists
+   */
   isUser: (email: string) => Promise<boolean>
+  /**
+   * Looks up user using email
+   * @param email Email to find user with
+   * @returns user info
+   */
   findUserByEmail: (email: string) => Promise<User | null>
+  /**
+   * Looks up user with id
+   * @param id Id to find user with
+   * @returns user info
+   */
   findUserById: (id: string) => Promise<User | null>
+  /**
+   * Finds users using the given info
+   * @param param0 selectors to find users with
+   * @returns user info
+   */
   findUser: (
     selectors: FindUserSelectors
   ) => Promise<User | null>
+  /**
+   * Creates new user and enters it into DB
+   * @param email new user's email
+   * @param password user to generate hash for the user
+   * @returns user info
+   */
   createNewUser: (
     email: string,
     password: string
   ) => Promise<User>
+  /**
+   * Updates user with given data
+   * @param id user id to find user
+   * @param data data to update the found user with
+   * @returns whether update was successful
+   */
   updateUser: (
     _id: string,
     data: Record<string, any>
@@ -65,6 +97,12 @@ export const generateUserModel = (
     id
       ? findUserById(id.toHexString())
       : findUserByEmail(email)
+
+  /**
+   * Looks up whether user exists with the given email
+   * @param email
+   * @returns whether the use exists
+   */
   const isUser = async (email: string): Promise<boolean> =>
     !!(await findUserByEmail(email))
 
@@ -92,16 +130,21 @@ export const generateUserModel = (
     }
   }
 
+  /**
+   * Updates user with given data
+   * @param id user id to find user
+   * @param data data to update the found user with
+   */
   const updateUser = async (
-    _id: string,
+    id: string,
     data: Record<string, any>
   ): Promise<boolean> => {
-    const updated = await users.updateOne(
-      { _id: new ObjectID(_id) },
+    const { modifiedCount } = await users.updateOne(
+      { _id: new ObjectID(id) },
       data
     )
 
-    return updated.modifiedCount === 1
+    return modifiedCount === 1
   }
 
   return Object.freeze({

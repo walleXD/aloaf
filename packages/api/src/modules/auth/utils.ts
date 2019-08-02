@@ -44,6 +44,12 @@ export const refreshTokenGenerator = (
 
 type VerifiedAccessToken = string | null
 
+/**
+ * Verifies access token
+ * @param token access token to verify
+ * @param accessSecret secret to verify token with
+ * @returns if valid, returns `userId` otherwise `null`
+ */
 const verifyAccessToken = (
   token: string,
   accessSecret: string
@@ -63,6 +69,12 @@ type VerifiedRefreshToken = {
   count: number
 } | null
 
+/**
+ * Verifies refresh token
+ * @param token refresh token to verify
+ * @param refreshSecret secret to verify token with
+ * @returns if valid, returns `userId` and `count` otherwise `null`
+ */
 const verifyRefreshToken = (
   token: string,
   refreshSecret: string
@@ -102,7 +114,7 @@ export interface TokenGenerator {
  * Higher order function which wraps other token generator fns and injects secrets & expiration
  * @param accessSecret Secret used to generate access token
  * @param refreshSecret Secret used to generate refresh token
- * @returns Generator used to generate access and refresh tokens
+ * @returns Generators fns to generate access & refresh tokens as well as verify them
  */
 export const tokenGeneratorWithSecrets = (
   accessSecret: string,
