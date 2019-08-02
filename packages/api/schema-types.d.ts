@@ -70,6 +70,8 @@ export interface NexusGenFieldTypes {
   }
   Mutation: {
     // field return type
+    invalidateTokens: boolean // Boolean!
+    refreshTokens: NexusGenRootTypes['AuthPayload'] | null // AuthPayload
     signIn: NexusGenRootTypes['AuthPayload'] | null // AuthPayload
     signUp: NexusGenRootTypes['AuthPayload'] | null // AuthPayload
   }
@@ -88,6 +90,10 @@ export interface NexusGenFieldTypes {
 
 export interface NexusGenArgTypes {
   Mutation: {
+    refreshTokens: {
+      // args
+      refreshToken: string // String!
+    }
     signIn: {
       // args
       cookies?: boolean | null // Boolean

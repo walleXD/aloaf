@@ -18,6 +18,7 @@ import {
   signInHelper
 } from './utils'
 import { NexusGenRootTypes } from 'api/schema-types'
+import { ObjectId } from 'bson'
 
 interface AuthContext {
   res: Response
@@ -139,8 +140,6 @@ const signInMutation = mutationField('signIn', {
       models.users
     )
 
-    // ToDo: Update count with new refresh token issue
-
     // uses the validated user info to generate JWT tokens
     return signInHelper(
       _id,
@@ -152,13 +151,73 @@ const signInMutation = mutationField('signIn', {
   }
 })
 
+const refreshTokensMutation = mutationField(
+  'refreshTokens',
+  {
+    type: AuthPayload,
+    nullable: true,
+    args: {
+      refreshToken: stringArg({ required: true })
+    },
+    resolve: async (
+      _,
+      { refreshToken },
+      { tokenGenerator, models }: AuthContext
+    ): Promise<NexusGenRootTypes['AuthPayload'] | null> => {
+      const data = tokenGenerator.verifyRefreshToken(
+        refreshToken
+      )
+
+      if (!!data) {
+        const user = await models.users.findUserById(
+          data.userId
+        )
+
+        if (user && user.count == data.count)
+          return signInHelper(
+            new ObjectId(data.userId),
+            data.count,
+            tokenGenerator
+          )
+      }
+
+      return null
+    }
+  }
+)
+
+const invalidateTokensMutation = mutationField(
+  'invalidateTokens',
+  {
+    type: 'Boolean',
+    nullable: false,
+    resolve: async (
+      _,
+      __,
+      { user, models }: AuthContext
+    ): Promise<boolean> => {
+      if (user) {
+        return models.users.updateUser(
+          user._id.toHexString(),
+          {
+            $set: { count: user.count + 1 }
+          }
+        )
+      }
+      return false
+    }
+  }
+)
+
 export const AuthTypes = {
   Email,
   User,
   AuthPayload,
   meQueryField,
   signInMutation,
-  signUpMutation
+  signUpMutation,
+  refreshTokensMutation,
+  invalidateTokensMutation
 }
 
 export const AuthPermissions = {}

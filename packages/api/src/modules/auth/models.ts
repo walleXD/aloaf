@@ -25,6 +25,10 @@ export interface UserModel {
     email: string,
     password: string
   ) => Promise<User>
+  updateUser: (
+    _id: string,
+    data: Record<string, any>
+  ) => Promise<boolean>
 }
 
 export const generateUserModel = (
@@ -78,7 +82,7 @@ export const generateUserModel = (
       _id: new ObjectID(),
       email,
       passwordHash: await hash(password, 10),
-      count: 1 // ToDo: extract out new user count update into separate gn
+      count: 0
     }
     const { insertedId } = await users.insertOne(doc)
 
@@ -88,11 +92,24 @@ export const generateUserModel = (
     }
   }
 
+  const updateUser = async (
+    _id: string,
+    data: Record<string, any>
+  ): Promise<boolean> => {
+    const updated = await users.updateOne(
+      { _id: new ObjectID(_id) },
+      data
+    )
+
+    return updated.modifiedCount === 1
+  }
+
   return Object.freeze({
     isUser,
     findUser,
     findUserByEmail,
     findUserById,
-    createNewUser
+    createNewUser,
+    updateUser
   })
 }

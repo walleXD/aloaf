@@ -42,6 +42,49 @@ export const refreshTokenGenerator = (
   secret: string
 ): string => tokenGenerator({ userId, count }, secret, '7d')
 
+type VerifiedAccessToken = string | null
+
+const verifyAccessToken = (
+  token: string,
+  accessSecret: string
+): VerifiedAccessToken => {
+  try {
+    const { userId } = verify(token, accessSecret) as {
+      userId: string
+    }
+    return userId
+  } catch (e) {
+    return null
+  }
+}
+
+type VerifiedRefreshToken = {
+  userId: string
+  count: number
+} | null
+
+const verifyRefreshToken = (
+  token: string,
+  refreshSecret: string
+): VerifiedRefreshToken => {
+  try {
+    const { userId, count } = verify(
+      token,
+      refreshSecret
+    ) as {
+      userId: string
+      count: number
+    }
+
+    return {
+      userId,
+      count
+    }
+  } catch (e) {
+    return null
+  }
+}
+
 /**
  * Wraps token generator fns and injects secrets & expiration for JWT token generation
  * @typedef TokenGenerator
@@ -49,6 +92,10 @@ export const refreshTokenGenerator = (
 export interface TokenGenerator {
   accessToken: (userId: string) => string
   refreshToken: (userId: string, count: number) => string
+  verifyRefreshToken: (
+    token: string
+  ) => VerifiedRefreshToken
+  verifyAccessToken: (token: string) => VerifiedAccessToken
 }
 
 /**
@@ -65,7 +112,15 @@ export const tokenGeneratorWithSecrets = (
     accessToken: (userId: string): string =>
       accessTokenGenerator(userId, accessSecret),
     refreshToken: (userId: string, count: number): string =>
-      refreshTokenGenerator(userId, count, refreshSecret)
+      refreshTokenGenerator(userId, count, refreshSecret),
+    verifyRefreshToken: (
+      token: string
+    ): VerifiedRefreshToken =>
+      verifyRefreshToken(token, refreshSecret),
+    verifyAccessToken: (
+      token: string
+    ): VerifiedAccessToken =>
+      verifyAccessToken(token, accessSecret)
   })
 
 /**
@@ -188,8 +243,8 @@ export const signInHelper = (
   userId: ObjectID,
   count: number,
   tokenGenerator: TokenGenerator,
-  res: ServerResponse,
-  useCookies: boolean
+  res?: ServerResponse,
+  useCookies?: boolean
 ): {
   refreshToken: string
   accessToken: string
@@ -201,7 +256,7 @@ export const signInHelper = (
     tokenGenerator
   )
 
-  if (useCookies)
+  if (useCookies && res)
     addTokensToCookies({ accessToken, refreshToken }, res)
 
   return {

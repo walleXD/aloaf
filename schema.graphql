@@ -17,6 +17,9 @@ specified in RFC822: https://www.w3.org/Protocols/rfc822/.
 scalar EmailAddress
 
 type Mutation {
+  invalidateTokens: Boolean!
+  refreshTokens(refreshToken: String!): AuthPayload
+
   """
   Allows existing user to sign in with their info
   """
