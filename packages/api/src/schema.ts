@@ -6,6 +6,7 @@ import { applyMiddleware } from 'graphql-middleware'
 import { PlayThingTypes } from './modules/playThing'
 import { AuthTypes, AuthPermissions } from '@loaf/auth'
 import { generatePermissions } from './utils'
+import { GraphQLSchemaWithFragmentReplacements } from 'graphql-middleware/dist/types'
 
 export const generateSchema = (): NexusSchema =>
   makeSchema({
@@ -29,7 +30,7 @@ export const generateSchema = (): NexusSchema =>
     )
   })
 
-export default (): NexusSchema => {
+export default (): GraphQLSchemaWithFragmentReplacements => {
   const defaultMiddlewares = [
     generatePermissions(AuthPermissions)
   ]

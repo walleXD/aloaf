@@ -8,9 +8,10 @@ import {
 import { ApolloServer } from 'apollo-server-micro'
 import {
   ServerResponse as Response,
-  IncomingMessage as Request
+  IncomingMessage as Request,
+  IncomingMessage,
+  ServerResponse
 } from 'http'
-import { pipe } from 'desmond'
 import initDB, {
   generateEntities,
   DBConfig,
@@ -25,6 +26,7 @@ import {
   User,
   getActiveUser
 } from '@loaf/auth'
+import { RequestHandler } from 'micro'
 
 interface Context {
   res: Response
@@ -59,6 +61,27 @@ const generateContextGenerator = (
   )
 })
 
+const generateContext = async (
+  req: Request,
+  res: Response,
+  entities: AllEntities
+): Promise<Context> => ({
+  res,
+  req,
+  models: generateModels(entities),
+  tokenGenerator: tokenGenerator(
+    accessSecret,
+    refreshSecret
+  ),
+  user: await getActiveUser(
+    req,
+    res,
+    accessSecret,
+    refreshSecret,
+    generateModels(entities)
+  )
+})
+
 const initServer = (context: Context): ApolloServer =>
   new ApolloServer({
     schema: generateSchema(),
@@ -74,8 +97,7 @@ const dBConfigs: DBConfig[] = [
 
 const generateServerHandler = (
   server: ApolloServer
-): ((req: Request, res: Response) => Promise<void>) =>
-  server.createHandler()
+): RequestHandler => server.createHandler()
 
 /**
  * Main fn which bootstraps and starts the server
@@ -92,19 +114,20 @@ const generateServerHandler = (
 const bootstrap = async (
   req: Request,
   res: Response
-): Promise<void> =>
-  pipe(
-    initDB, // 1
-    generateEntities, // 2
-    generateContextGenerator, // 3
-    (contextGenerator): Promise<Context> =>
-      contextGenerator(req, res), // 3
-    initServer, // 4
-    generateServerHandler, // 5
-    (handler): Promise<void> => handler(req, res) // 5
-  )(dBConfigs)
+): Promise<void> => {
+  const db = await initDB(dBConfigs)
 
-module.exports = pipe(
-  bootstrap,
-  cors()
-)
+  const entities = generateEntities(db)
+
+  const ctx = await generateContext(req, res, entities)
+
+  const server = initServer(ctx)
+
+  if (req.method === 'OPTIONS') {
+    res.end()
+    return
+  }
+  cors()(server.createHandler())(req, res)
+}
+
+module.exports = bootstrap
