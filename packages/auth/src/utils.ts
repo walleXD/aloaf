@@ -59,7 +59,7 @@ const verifyAccessToken = (
       userId: string
     }
     return userId
-  } catch (e) {
+  } catch {
     return null
   }
 }
@@ -92,7 +92,7 @@ const verifyRefreshToken = (
       userId,
       count
     }
-  } catch (e) {
+  } catch {
     return null
   }
 }
@@ -209,7 +209,7 @@ export const getActiveUser = async (
       accessTokenSecret
     ) as { userId: string }
     return models.users.findUserById(userId)
-  } catch (e) {}
+  } catch {}
 
   // 4. If accessToken not valid, extract userId from refreshToken
   try {
@@ -237,7 +237,7 @@ export const getActiveUser = async (
 
       return user
     }
-  } catch (e) {}
+  } catch {}
 
   return null
 }
