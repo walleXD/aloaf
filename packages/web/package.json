@@ -10,6 +10,10 @@
     "y": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
+    "@material-ui/core": "^4.3.1",
+    "@material-ui/icons": "^4.2.1",
+    "@material-ui/styles": "^4.3.0",
+    "clsx": "^1.0.4",
     "graphql": "^14.4.2",
     "next": "^9.0.2",
     "next-compose-plugins": "^2.2.0",

@@ -22,8 +22,8 @@
     "typescript": "^3.5.3"
   },
   "dependencies": {
-    "@loaf/mono-test": "*",
     "@loaf/auth": "*",
+    "@loaf/mono-test": "*",
     "apollo-connector-mongodb": "^2.0.3",
     "apollo-server-micro": "^2.7.0",
     "bcrypt": "^3.0.6",
