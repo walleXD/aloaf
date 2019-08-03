@@ -12,9 +12,9 @@
       "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/micro-dev",
       "runtimeArgs": ["--watch", "../", "-p", "4000"],
       "env": {
-        "NODE_OPTIONS": "--inspect-brk"
+        "NODE_OPTIONS": "--inspect-brk=9239"
       },
-      "port": 9229,
+      "port": 9239,
       "console": "integratedTerminal"
     }
   ]
