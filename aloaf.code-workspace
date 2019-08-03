@@ -36,6 +36,9 @@
     },
     "[typescriptreact]": {
       "editor.formatOnSave": false
-    }
+    },
+    "cSpell.words": [
+      "esnext"
+    ]
   }
 }
