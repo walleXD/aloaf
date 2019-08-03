@@ -12,5 +12,10 @@
     "declarationMap": false
   },
   "exclude": ["node_modules", ".next"],
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
+  "include": [
+    "next-env.d.ts",
+    "client-types.tsx",
+    "**/*.ts",
+    "**/*.tsx"
+  ]
 }

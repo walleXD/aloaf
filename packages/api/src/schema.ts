@@ -11,8 +11,14 @@ export const generateSchema = (): NexusSchema =>
   makeSchema({
     types: [PlayThingTypes, AuthTypes],
     outputs: {
-      schema: join(__dirname, '../../../schema.graphql'),
-      typegen: join(__dirname, '../schema-types.d.ts')
+      schema: join(
+        __dirname,
+        '../generated/schema.graphql'
+      ),
+      typegen: join(
+        __dirname,
+        '../generated/schema-types.d.ts'
+      )
     },
     prettierConfig: join(
       __dirname,
