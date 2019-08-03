@@ -34,9 +34,7 @@ export interface AllEntities {
 export const generateEntities = ([
   DB1,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  DB2,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  ...otherDBs
+  DB2
 ]: MongoConnector[]): AllEntities => ({
   users: new MongoEntity(DB1, 'users', {
     cacheMap: lruCache

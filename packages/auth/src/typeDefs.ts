@@ -25,7 +25,7 @@ import {
   notAuthenticated
 } from './permissionRules'
 
-interface AuthContext {
+export interface AuthContext {
   res: Response
   req: Request
   models: {
@@ -72,7 +72,7 @@ const meQuery = queryField('me', {
   async resolve(
     _,
     __,
-    { user }: AuthContext
+    { user }
   ): Promise<NexusGenRootTypes['User'] | null> {
     // checks context for user object otherwise returns null
     return !user
@@ -96,7 +96,7 @@ const signUpMutation = mutationField('signUp', {
   resolve: async (
     _,
     { email, password, cookies = false },
-    { models, tokenGenerator, res }: AuthContext
+    { models, tokenGenerator, res }
   ): Promise<NexusGenRootTypes['AuthPayload'] | null> => {
     // checks if the user already exists
     const isUser = await models.users.isUser(email)
@@ -136,7 +136,7 @@ const signInMutation = mutationField('signIn', {
   resolve: async (
     _,
     { email, password, cookies = false },
-    { models, res, tokenGenerator }: AuthContext
+    { models, res, tokenGenerator }
   ): Promise<NexusGenRootTypes['AuthPayload'] | null> => {
     // validates the user info is correct
     const { _id, count } = await getValidatedUser(
@@ -169,7 +169,7 @@ const refreshTokensMutation = mutationField(
     resolve: async (
       _,
       { refreshToken },
-      { tokenGenerator, models }: AuthContext
+      { tokenGenerator, models }
     ): Promise<NexusGenRootTypes['AuthPayload'] | null> => {
       const data = tokenGenerator.verifyRefreshToken(
         refreshToken
@@ -203,7 +203,7 @@ const invalidateTokensMutation = mutationField(
     resolve: async (
       _,
       __,
-      { user, models }: AuthContext
+      { user, models }
     ): Promise<boolean> => {
       if (user) {
         return models.users.updateUser(
