@@ -4,6 +4,8 @@ import Head from 'next/head'
 import { ThemeProvider } from '@material-ui/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import theme from '../utils/theme'
+import { ApolloProvider } from 'react-apollo'
+import withApollo from '../utils/withApollo'
 
 class MyApp extends App {
   public componentDidMount(): void {
@@ -18,21 +20,24 @@ class MyApp extends App {
   }
 
   public render(): ReactElement {
-    const { Component, pageProps } = this.props
+    // @ts-ignore
+    const { Component, pageProps, apollo } = this.props
 
     return (
       <Container>
-        <Head>
-          <title>My page</title>
-        </Head>
-        <ThemeProvider theme={theme}>
-          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-          <CssBaseline />
-          <Component {...pageProps} />
-        </ThemeProvider>
+        <ApolloProvider client={apollo}>
+          <Head>
+            <title>My page</title>
+          </Head>
+          <ThemeProvider theme={theme}>
+            {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+            <CssBaseline />
+            <Component {...pageProps} />
+          </ThemeProvider>
+        </ApolloProvider>
       </Container>
     )
   }
 }
 
-export default MyApp
+export default withApollo(MyApp)

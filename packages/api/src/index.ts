@@ -18,6 +18,7 @@ import initDB, {
 } from './db'
 import generateModels, { Models } from './models'
 import generateSchema from './schema'
+import cors from 'micro-cors'
 import {
   TokenGenerator,
   tokenGeneratorWithSecrets as tokenGenerator,
@@ -103,4 +104,7 @@ const bootstrap = async (
     (handler): Promise<void> => handler(req, res) // 5
   )(dBConfigs)
 
-module.exports = bootstrap
+module.exports = pipe(
+  bootstrap,
+  cors()
+)
