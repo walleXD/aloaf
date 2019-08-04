@@ -8,9 +8,7 @@ import {
 import { ApolloServer } from 'apollo-server-micro'
 import {
   ServerResponse as Response,
-  IncomingMessage as Request,
-  IncomingMessage,
-  ServerResponse
+  IncomingMessage as Request
 } from 'http'
 import initDB, {
   generateEntities,
@@ -26,6 +24,7 @@ import {
   User,
   getActiveUser
 } from '@loaf/auth'
+import { pipe } from 'desmond'
 import { RequestHandler } from 'micro'
 
 interface Context {
@@ -35,31 +34,6 @@ interface Context {
   tokenGenerator: TokenGenerator
   user: User | null
 }
-
-const generateContextGenerator = (
-  entities: AllEntities
-): ((
-  req: Request,
-  res: Response
-) => Promise<Context>) => async (
-  req: Request,
-  res: Response
-): Promise<Context> => ({
-  res,
-  req,
-  models: generateModels(entities),
-  tokenGenerator: tokenGenerator(
-    accessSecret,
-    refreshSecret
-  ),
-  user: await getActiveUser(
-    req,
-    res,
-    accessSecret,
-    refreshSecret,
-    generateModels(entities)
-  )
-})
 
 const generateContext = async (
   req: Request,
@@ -95,10 +69,6 @@ const dBConfigs: DBConfig[] = [
   { name: 'DB2', url: mongoURL2 }
 ]
 
-const generateServerHandler = (
-  server: ApolloServer
-): RequestHandler => server.createHandler()
-
 /**
  * Main fn which bootstraps and starts the server
  * Bootstrap process:
@@ -111,7 +81,7 @@ const generateServerHandler = (
  * @param res Outgoing response to client
  * @returns Handler function which micro can consume to start server
  */
-const bootstrap = async (
+const bootstrap: RequestHandler = async (
   req: Request,
   res: Response
 ): Promise<void> => {
@@ -127,7 +97,10 @@ const bootstrap = async (
     res.end()
     return
   }
-  cors()(server.createHandler())(req, res)
+  return server.createHandler()(req, res)
 }
 
-module.exports = bootstrap
+module.exports = pipe(
+  bootstrap,
+  cors()
+)
