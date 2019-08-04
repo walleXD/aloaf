@@ -4,9 +4,10 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "next",
-    "build": "next build",
-    "start": "next start",
+    "dev": "node devServer.js",
+    "build": "next build src",
+    "start": "next start src",
+    "export": "yarn build && next export src -o dist",
     "generate": "graphql-codegen --config codegen.yml",
     "generate:w": "yarn generate --watch"
   },

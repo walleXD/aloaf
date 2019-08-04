@@ -14,7 +14,7 @@
       "type": "node",
       "request": "launch",
       "name": "Next: Node",
-      "program": "${workspaceFolder}/server.js",
+      "program": "${workspaceFolder}/devServer.js",
       "env": {
         "NODE_OPTIONS": "--inspect-brk=9249"
       },

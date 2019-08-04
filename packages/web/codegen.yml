@@ -2,7 +2,7 @@ overwrite: true
 schema: "../api/generated/schema.graphql"
 documents: "graphql/**/*.ts"
 generates:
-  generated/GraphQLComponents.tsx:
+  src/generated/GraphQLComponents.tsx:
     config:
       noNamespaces: true
     plugins:

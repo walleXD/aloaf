@@ -1,5 +1,5 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../../tsconfig.json",
   "compilerOptions": {
     "lib": ["dom", "dom.iterable", "esnext"],
     "noEmit": true,
@@ -16,6 +16,7 @@
     "next-env.d.ts",
     "client-types.tsx",
     "**/*.ts",
-    "**/*.tsx", "server.js"
+    "**/*.tsx",
+    "server.js"
   ]
 }

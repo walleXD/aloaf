@@ -4,6 +4,7 @@
 
 build/
 lib/
+dist/
 
 ### Linux ###
 *~
