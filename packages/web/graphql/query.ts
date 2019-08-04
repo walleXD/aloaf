@@ -1,7 +1,7 @@
 import { gql } from 'apollo-boost'
 
-export const HELLO_WORLD = gql`
-  query HELLO_WORLD {
+export const HelloWorld = gql`
+  query HelloWorld {
     hello
   }
 `

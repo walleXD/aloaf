@@ -14,61 +14,58 @@ export type EmailAddress = any
 // Documents
 // ====================================================
 
-export type HelloWorldVariables = {}
+export interface HelloWorldVariables {}
 
-export type HelloWorldQuery = {
+export interface HelloWorldQuery {
   __typename?: 'Query'
 
   hello: string
 }
 
-export const Hello_WorldDocument = gql`
-  query HELLO_WORLD {
+export const HelloWorldDocument = gql`
+  query HelloWorld {
     hello
   }
 `
-export type Hello_WorldComponentProps = Omit<
-  ReactApollo.QueryProps<
-    Hello_WorldQuery,
-    Hello_WorldQueryVariables
-  >,
+export type HelloWorldComponentProps = Omit<
+  ReactApollo.QueryProps<HelloWorldQuery>,
   'query'
 >
 
-export const Hello_WorldComponent = (
-  props: Hello_WorldComponentProps
+export const HelloWorldComponent = (
+  props: HelloWorldComponentProps
 ) => (
   <ReactApollo.Query<
-    Hello_WorldQuery,
-    Hello_WorldQueryVariables
+    HelloWorldQuery,
+    HelloWorldQueryVariables
   >
-    query={Hello_WorldDocument}
+    query={HelloWorldDocument}
     {...props}
   />
 )
 
-export type Hello_WorldProps<TChildProps = {}> = Partial<
+export type HelloWorldProps<TChildProps = {}> = Partial<
   ReactApollo.DataProps<
-    Hello_WorldQuery,
-    Hello_WorldQueryVariables
+    HelloWorldQuery,
+    HelloWorldQueryVariables
   >
 > &
   TChildProps
-export function withHello_World<TProps, TChildProps = {}>(
+export function withHelloWorld<TProps, TChildProps = {}>(
   operationOptions?: ReactApollo.OperationOption<
     TProps,
-    Hello_WorldQuery,
-    Hello_WorldQueryVariables,
-    Hello_WorldProps<TChildProps>
+    HelloWorldQuery,
+    HelloWorldQueryVariables,
+    HelloWorldProps<TChildProps>
   >
 ) {
   return ReactApollo.withQuery<
     TProps,
-    Hello_WorldQuery,
-    Hello_WorldQueryVariables,
-    Hello_WorldProps<TChildProps>
-  >(Hello_WorldDocument, {
-    alias: 'withHello_World',
+    HelloWorldQuery,
+    HelloWorldQueryVariables,
+    HelloWorldProps<TChildProps>
+  >(HelloWorldDocument, {
+    alias: 'withHelloWorld',
     ...operationOptions
   })
 }

@@ -5,3 +5,4 @@
 **/tmp/**
 **/node_modules/**
 schema-types.d.ts
+GraphQLComponents.tsx

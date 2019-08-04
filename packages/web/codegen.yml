@@ -1,8 +1,8 @@
 overwrite: true
-schema: "http://localhost:4000/graphql"
+schema: "../api/generated/schema.graphql"
 documents: "graphql/**/*.ts"
 generates:
-  generated/client.schema-types.tsx:
+  generated/GraphQLComponents.tsx:
     config:
       noNamespaces: true
     plugins:
