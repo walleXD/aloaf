@@ -1,13 +1,11 @@
 overwrite: true
 schema: "http://localhost:4000/graphql"
-documents: "src/**/*.graphql"
+documents: "graphql/**/*.ts"
 generates:
-  generated/client-types.tsx:
+  generated/client.schema-types.tsx:
+    config:
+      noNamespaces: true
     plugins:
-      - "typescript"
-      - "typescript-operations"
+      - "typescript-common"
+      - "typescript-client"
       - "typescript-react-apollo"
-      - "fragment-matcher"
-  ./graphql.schema.json:
-    plugins:
-      - "introspection"

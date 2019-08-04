@@ -7,7 +7,7 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "y": "graphql-codegen --config codegen.yml"
+    "generate": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
     "@material-ui/core": "^4.3.1",
@@ -36,6 +36,9 @@
     "@types/node": "^12.6.8",
     "@types/react": "^16.8.23",
     "@types/react-dom": "^16.8.5",
-    "typescript": "^3.5.3"
+    "apollo": "^2.16.3",
+    "graphql-codegen-typescript-client": "^0.18.2",
+    "typescript": "^3.5.3",
+    "@graphql-codegen/typescript-graphql-files-modules": "1.4.0"
   }
 }
