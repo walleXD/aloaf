@@ -16,6 +16,6 @@
     "next-env.d.ts",
     "client-types.tsx",
     "**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx", "server.js"
   ]
 }

@@ -17,14 +17,12 @@ import initDB, {
 } from './db'
 import generateModels, { Models } from './models'
 import generateSchema from './schema'
-import cors from 'micro-cors'
 import {
   TokenGenerator,
   tokenGeneratorWithSecrets as tokenGenerator,
   User,
   getActiveUser
 } from '@loaf/auth'
-import { pipe } from 'desmond'
 import { RequestHandler } from 'micro'
 
 interface Context {
@@ -91,11 +89,7 @@ const bootstrap: RequestHandler = async (
     server = initServer(ctx)
 
   // handle cors request methods not processed by apollo
-  if (req.method === 'OPTIONS') return res.end()
-  else return server.createHandler()(req, res)
+  return server.createHandler()(req, res)
 }
 
-module.exports = pipe(
-  bootstrap,
-  cors()
-)
+module.exports = bootstrap

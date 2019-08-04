@@ -4,8 +4,6 @@ import ApolloClient, {
   NormalizedCacheObject
 } from 'apollo-boost'
 
-const isDev = process.env.NODE_ENV === 'development'
-
 export default withApollo(
   ({
     ctx,
@@ -13,9 +11,7 @@ export default withApollo(
     initialState
   }): ApolloClient<NormalizedCacheObject> =>
     new ApolloClient({
-      uri: isDev
-        ? 'http://localhost:4000/graphql'
-        : '/graphql',
+      uri: '/graphql',
       cache: new InMemoryCache().restore(initialState || {})
     })
 )
