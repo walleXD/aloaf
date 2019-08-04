@@ -20,9 +20,16 @@ export default async (
         name
       }: DBConfig): Promise<MongoConnector> => {
         const con = new MongoConnector(url, name)
-        await con.connect()
+        try {
+          await con.connect()
 
-        return con
+          return con
+        } catch {
+          console.error(
+            `Failed to connect to ${con.dbName}`
+          )
+          return con
+        }
       }
     )
   )
