@@ -85,19 +85,14 @@ const bootstrap: RequestHandler = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const db = await initDB(dBConfigs)
+  const db = await initDB(dBConfigs),
+    entities = generateEntities(db),
+    ctx = await generateContext(req, res, entities),
+    server = initServer(ctx)
 
-  const entities = generateEntities(db)
-
-  const ctx = await generateContext(req, res, entities)
-
-  const server = initServer(ctx)
-
-  if (req.method === 'OPTIONS') {
-    res.end()
-    return
-  }
-  return server.createHandler()(req, res)
+  // handle cors request methods not processed by apollo
+  if (req.method === 'OPTIONS') return res.end()
+  else return server.createHandler()(req, res)
 }
 
 module.exports = pipe(

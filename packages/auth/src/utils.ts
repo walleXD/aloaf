@@ -197,7 +197,21 @@ export const getActiveUser = async (
   // 1. extract tokens
   const cookies = parse(req.headers.cookie || ''),
     oldAccessToken = cookies['access-token'],
-    oldRefreshToken = cookies['refresh-token']
+    oldRefreshToken = cookies['refresh-token'],
+    bearerToken = req.headers.authorization
+
+  if (bearerToken) {
+    const token = bearerToken.replace('Bearer ', '')
+    try {
+      const { userId } = verify(
+        token,
+        accessTokenSecret
+      ) as { userId: string }
+      return models.users.findUserById(userId)
+    } catch {
+      return null
+    }
+  }
 
   if (!oldAccessToken && !oldRefreshToken) return null
 
