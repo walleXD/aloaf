@@ -1,6 +1,10 @@
 projects:
   api:
-    schemaPath: ./packages/api/generated/schema.graphql
+    schemaPath:
+      - ./packages/api/generated/schema.graphql
+      - ./packages/web/schema.graphl
     extensions:
       endpoints:
         default: http://localhost:4000/graphql
+      customDirectives:
+        - client

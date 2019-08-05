@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
-import * as ReactApollo from 'react-apollo'
 import * as React from 'react'
+import * as ReactApollo from 'react-apollo'
 export type Omit<T, K extends keyof T> = Pick<
   T,
   Exclude<keyof T, K>
@@ -14,18 +14,32 @@ export type EmailAddress = any
 // Documents
 // ====================================================
 
-export interface SignInVariables {
+export type IsAuthenticatedVariables = {}
+
+export type IsAuthenticatedQuery = {
+  __typename?: 'Query'
+
+  me: Maybe<IsAuthenticatedMe>
+}
+
+export type IsAuthenticatedMe = {
+  __typename?: 'User'
+
+  id: string
+}
+
+export type SignInVariables = {
   email: string
   password: string
 }
 
-export interface SignInMutation {
+export type SignInMutation = {
   __typename?: 'Mutation'
 
   signIn: Maybe<SignInSignIn>
 }
 
-export interface SignInSignIn {
+export type SignInSignIn = {
   __typename?: 'AuthPayload'
 
   accessToken: string
@@ -33,14 +47,71 @@ export interface SignInSignIn {
   refreshToken: string
 }
 
-export interface HelloWorldVariables {}
+export type HelloWorldVariables = {}
 
-export interface HelloWorldQuery {
+export type HelloWorldQuery = {
   __typename?: 'Query'
 
   hello: string
 }
 
+export const IsAuthenticatedDocument = gql`
+  query IsAuthenticated {
+    me {
+      id
+    }
+  }
+`
+export type IsAuthenticatedComponentProps = Omit<
+  ReactApollo.QueryProps<
+    IsAuthenticatedQuery,
+    IsAuthenticatedQueryVariables
+  >,
+  'query'
+>
+
+export const IsAuthenticatedComponent = (
+  props: IsAuthenticatedComponentProps
+) => (
+  <ReactApollo.Query<
+    IsAuthenticatedQuery,
+    IsAuthenticatedQueryVariables
+  >
+    query={IsAuthenticatedDocument}
+    {...props}
+  />
+)
+
+export type IsAuthenticatedProps<
+  TChildProps = {}
+> = Partial<
+  ReactApollo.DataProps<
+    IsAuthenticatedQuery,
+    IsAuthenticatedQueryVariables
+  >
+> &
+  TChildProps
+export function withIsAuthenticated<
+  TProps,
+  TChildProps = {}
+>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    IsAuthenticatedQuery,
+    IsAuthenticatedQueryVariables,
+    IsAuthenticatedProps<TChildProps>
+  >
+) {
+  return ReactApollo.withQuery<
+    TProps,
+    IsAuthenticatedQuery,
+    IsAuthenticatedQueryVariables,
+    IsAuthenticatedProps<TChildProps>
+  >(IsAuthenticatedDocument, {
+    alias: 'withIsAuthenticated',
+    ...operationOptions
+  })
+}
 export const SignInDocument = gql`
   mutation SignIn($email: String!, $password: String!) {
     signIn(
@@ -55,12 +126,12 @@ export const SignInDocument = gql`
 `
 export type SignInMutationFn = ReactApollo.MutationFn<
   SignInMutation,
-  SignInVariables
+  SignInMutationVariables
 >
 export type SignInComponentProps = Omit<
   ReactApollo.MutationProps<
     SignInMutation,
-    SignInVariables
+    SignInMutationVariables
   >,
   'mutation'
 >
@@ -68,28 +139,34 @@ export type SignInComponentProps = Omit<
 export const SignInComponent = (
   props: SignInComponentProps
 ) => (
-  <ReactApollo.Mutation<SignInMutation, SignInVariables>
+  <ReactApollo.Mutation<
+    SignInMutation,
+    SignInMutationVariables
+  >
     mutation={SignInDocument}
     {...props}
   />
 )
 
 export type SignInProps<TChildProps = {}> = Partial<
-  ReactApollo.MutateProps<SignInMutation, SignInVariables>
+  ReactApollo.MutateProps<
+    SignInMutation,
+    SignInMutationVariables
+  >
 > &
   TChildProps
 export function withSignIn<TProps, TChildProps = {}>(
   operationOptions?: ReactApollo.OperationOption<
     TProps,
     SignInMutation,
-    SignInVariables,
+    SignInMutationVariables,
     SignInProps<TChildProps>
   >
 ) {
   return ReactApollo.withMutation<
     TProps,
     SignInMutation,
-    SignInVariables,
+    SignInMutationVariables,
     SignInProps<TChildProps>
   >(SignInDocument, {
     alias: 'withSignIn',
@@ -104,7 +181,7 @@ export const HelloWorldDocument = gql`
 export type HelloWorldComponentProps = Omit<
   ReactApollo.QueryProps<
     HelloWorldQuery,
-    HelloWorldVariables
+    HelloWorldQueryVariables
   >,
   'query'
 >
@@ -112,7 +189,10 @@ export type HelloWorldComponentProps = Omit<
 export const HelloWorldComponent = (
   props: HelloWorldComponentProps
 ) => (
-  <ReactApollo.Query<HelloWorldQuery, HelloWorldVariables>
+  <ReactApollo.Query<
+    HelloWorldQuery,
+    HelloWorldQueryVariables
+  >
     query={HelloWorldDocument}
     {...props}
   />
@@ -121,7 +201,7 @@ export const HelloWorldComponent = (
 export type HelloWorldProps<TChildProps = {}> = Partial<
   ReactApollo.DataProps<
     HelloWorldQuery,
-    HelloWorldVariables
+    HelloWorldQueryVariables
   >
 > &
   TChildProps
@@ -129,14 +209,14 @@ export function withHelloWorld<TProps, TChildProps = {}>(
   operationOptions?: ReactApollo.OperationOption<
     TProps,
     HelloWorldQuery,
-    HelloWorldVariables,
+    HelloWorldQueryVariables,
     HelloWorldProps<TChildProps>
   >
 ) {
   return ReactApollo.withQuery<
     TProps,
     HelloWorldQuery,
-    HelloWorldVariables,
+    HelloWorldQueryVariables,
     HelloWorldProps<TChildProps>
   >(HelloWorldDocument, {
     alias: 'withHelloWorld',

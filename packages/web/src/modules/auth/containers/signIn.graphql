@@ -1,0 +1,16 @@
+query IsAuthenticated {
+  me {
+    id
+  }
+}
+
+mutation SignIn($email: String!, $password: String!) {
+  signIn(
+    email: $email
+    password: $password
+    cookies: true
+  ) {
+    accessToken
+    refreshToken
+  }
+}
