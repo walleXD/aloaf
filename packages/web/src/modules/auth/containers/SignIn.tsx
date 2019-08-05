@@ -5,7 +5,6 @@ import {
   IsAuthenticatedComponent
 } from '../../../generated/GraphQLComponents'
 import { SignInForm } from '../components/SignInForm'
-import { ApolloConsumer } from 'react-apollo'
 import Router from 'next/router'
 
 interface Values {
@@ -24,18 +23,11 @@ const SignInPage: FC = (): ReactElement => (
         return (
           <>
             <Typography>SignIn page</Typography>
-            <ApolloConsumer>
-              {(client): ReactElement => (
-                <SignInComponent>
-                  {(signIn): ReactElement => (
-                    <SignInForm
-                      signIn={signIn}
-                      client={client}
-                    />
-                  )}
-                </SignInComponent>
+            <SignInComponent>
+              {(signIn): ReactElement => (
+                <SignInForm signIn={signIn} />
               )}
-            </ApolloConsumer>
+            </SignInComponent>
           </>
         )
     }}

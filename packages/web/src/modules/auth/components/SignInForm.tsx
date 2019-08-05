@@ -1,7 +1,6 @@
 import React, { FC, ReactElement } from 'react'
 import { Formik, Form, Field, FormikActions } from 'formik'
 import { SignInMutationFn } from '../../../generated/GraphQLComponents'
-import { ApolloClient } from 'apollo-boost'
 import Router from 'next/router'
 
 interface FormValues {
@@ -11,12 +10,10 @@ interface FormValues {
 
 interface Props {
   signIn: SignInMutationFn
-  client: ApolloClient<any>
 }
 
 export const SignInForm: FC<Props> = ({
-  signIn,
-  client
+  signIn
 }): ReactElement => (
   <Formik
     initialValues={{
@@ -32,9 +29,6 @@ export const SignInForm: FC<Props> = ({
       try {
         await signIn({
           variables: { ...values }
-        })
-        client.writeData({
-          data: { isAuthenticated: true }
         })
         setSubmitting(false)
         Router.push('/')
