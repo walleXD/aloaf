@@ -1,11 +1,17 @@
 import Router from 'next/router'
 import {
   ApolloClient,
-  NormalizedCacheObject,
-  gql
+  NormalizedCacheObject
 } from 'apollo-boost'
 import { ApolloAppContext } from 'next-with-apollo'
 
+import { IsAuthenticatedDocument } from '../../generated/GraphQLComponents'
+
+/**
+ * Isomorphic redirect
+ * @param context NextPageContext injected into getInitialProps method
+ * @param target The location to redirect to
+ */
 export const redirect = (
   context: ApolloAppContext,
   target: string
@@ -21,18 +27,17 @@ export const redirect = (
   }
 }
 
+/**
+ * SSR graphql request to check if user is authenticated & made from getInitialProps
+ * @param apolloClient Apollo client passed in from NextPageContext
+ * @returns user's `id` if logged in, otherwise `null`
+ */
 export const ssrIsAuthenticatedCheck = (
   apolloClient: ApolloClient<NormalizedCacheObject>
 ): Promise<{ id: string | null }> =>
   apolloClient
     .query({
-      query: gql`
-        {
-          me {
-            id
-          }
-        }
-      `
+      query: IsAuthenticatedDocument
     })
     .then(({ data }): { id: string } => ({
       id: data.me.id
