@@ -1,7 +1,11 @@
 import React, { FC, ReactElement } from 'react'
 import { Formik, Form, Field, FormikActions } from 'formik'
-import { SignInMutationFn } from '../../../generated/GraphQLComponents'
 import Router from 'next/router'
+import { TextField } from 'formik-material-ui'
+import Button from '@material-ui/core/Button'
+import { object, string } from 'yup'
+
+import { SignInMutationFn } from 'web/src/generated/GraphQLComponents'
 
 interface FormValues {
   password: string
@@ -12,10 +16,20 @@ interface Props {
   signIn: SignInMutationFn
 }
 
+const signInValidationSchema = object().shape({
+  email: string()
+    .email('Enter a valid email')
+    .required('Email is required'),
+  password: string()
+    .min(8, 'Password must contain at least 8 characters')
+    .required('Enter your password')
+})
+
 export const SignInForm: FC<Props> = ({
   signIn
 }): ReactElement => (
   <Formik
+    validationSchema={signInValidationSchema}
     initialValues={{
       password: '',
       email: ''
@@ -25,7 +39,6 @@ export const SignInForm: FC<Props> = ({
       { setSubmitting }: FormikActions<FormValues>
     ): Promise<void> => {
       setSubmitting(true)
-      console.log(values)
       try {
         await signIn({
           variables: { ...values }
@@ -39,23 +52,29 @@ export const SignInForm: FC<Props> = ({
     }}
     render={(): ReactElement => (
       <Form>
-        <label htmlFor="email">Email</label>
         <Field
           id="email"
           name="email"
           placeholder="john@acme.com"
           type="email"
+          label="Email"
+          component={TextField}
         />
-
-        <label htmlFor="password">Password</label>
         <Field
           type="password"
           id="password"
           name="password"
           placeholder="password"
+          label="Password"
+          component={TextField}
         />
-
-        <button type="submit">Submit</button>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+        >
+          Submit
+        </Button>
       </Form>
     )}
   />

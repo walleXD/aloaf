@@ -14,32 +14,32 @@ export type EmailAddress = any
 // Documents
 // ====================================================
 
-export type IsAuthenticatedVariables = {}
+export interface IsAuthenticatedQueryVariables {}
 
-export type IsAuthenticatedQuery = {
+export interface IsAuthenticatedQuery {
   __typename?: 'Query'
 
   me: Maybe<IsAuthenticatedMe>
 }
 
-export type IsAuthenticatedMe = {
+export interface IsAuthenticatedMe {
   __typename?: 'User'
 
   id: string
 }
 
-export type SignInVariables = {
+export interface SignInMutationVariables {
   email: string
   password: string
 }
 
-export type SignInMutation = {
+export interface SignInMutation {
   __typename?: 'Mutation'
 
   signIn: Maybe<SignInSignIn>
 }
 
-export type SignInSignIn = {
+export interface SignInSignIn {
   __typename?: 'AuthPayload'
 
   accessToken: string
@@ -47,9 +47,9 @@ export type SignInSignIn = {
   refreshToken: string
 }
 
-export type HelloWorldVariables = {}
+export interface HelloWorldQueryVariables {}
 
-export type HelloWorldQuery = {
+export interface HelloWorldQuery {
   __typename?: 'Query'
 
   hello: string
