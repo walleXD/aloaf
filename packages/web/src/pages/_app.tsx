@@ -3,8 +3,9 @@ import App, { Container } from 'next/app'
 import Head from 'next/head'
 import { ThemeProvider } from '@material-ui/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import theme from '../utils/theme'
 import { ApolloProvider } from 'react-apollo'
+
+import theme from '../utils/theme'
 import withApollo from '../utils/withApollo'
 
 class MyApp extends App {
@@ -27,7 +28,7 @@ class MyApp extends App {
       <Container>
         <ApolloProvider client={apollo}>
           <Head>
-            <title>My page</title>
+            <title>A Loaf</title>
           </Head>
           <ThemeProvider theme={theme}>
             {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
