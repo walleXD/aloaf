@@ -11,7 +11,11 @@ export default withApollo(
     initialState
   }): ApolloClient<NormalizedCacheObject> =>
     new ApolloClient({
-      uri: '/graphql',
-      cache: new InMemoryCache().restore(initialState || {})
+      uri: 'http://localhost:3000/graphql',
+      cache: new InMemoryCache().restore(
+        initialState || {}
+      ),
+      credentials: 'include',
+      headers
     })
 )
