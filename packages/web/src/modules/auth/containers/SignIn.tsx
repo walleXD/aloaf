@@ -1,38 +1,36 @@
-import React, { ReactElement, FC } from 'react'
+import React, { ReactElement } from 'react'
 import { Typography } from '@material-ui/core'
-import Router from 'next/router'
+import { NextPage } from 'next'
 
-import {
-  SignInComponent,
-  IsAuthenticatedComponent
-} from '../../../generated/GraphQLComponents'
+import { SignInComponent } from '../../../generated/GraphQLComponents'
 import { SignInForm } from '../components/SignInForm'
+import { ssrIsAuthenticatedCheck, redirect } from '../utils'
 
 interface Values {
   password: string
   email: string
 }
 
-const SignInPage: FC = (): ReactElement => (
-  <IsAuthenticatedComponent>
-    {({ data, loading }): ReactElement | null => {
-      if (loading) return <span>loading</span>
-      else if (data && !!data.me) {
-        Router.push('/')
-        return null
-      } else
-        return (
-          <>
-            <Typography>SignIn page</Typography>
-            <SignInComponent>
-              {(signIn): ReactElement => (
-                <SignInForm signIn={signIn} />
-              )}
-            </SignInComponent>
-          </>
-        )
-    }}
-  </IsAuthenticatedComponent>
+const SignInPage: NextPage = (): ReactElement => (
+  <>
+    <Typography>SignIn page</Typography>
+    <SignInComponent>
+      {(signIn): ReactElement => (
+        <SignInForm signIn={signIn} />
+      )}
+    </SignInComponent>
+  </>
 )
+
+SignInPage.getInitialProps = async (ctx): Promise<{}> => {
+  const { id } = await ssrIsAuthenticatedCheck(
+    //@ts-ignore
+    ctx.apolloClient
+  )
+
+  if (id) redirect(ctx, '/')
+
+  return {}
+}
 
 export default SignInPage

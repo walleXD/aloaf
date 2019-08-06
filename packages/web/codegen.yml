@@ -7,7 +7,7 @@ generates:
     config:
       noNamespaces: true
       scalars:
-        Email: string
+        EmailAddress: string
         DateTime: Date
     plugins:
       - "typescript"
