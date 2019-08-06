@@ -1,11 +1,12 @@
 import React, { ReactElement, FC } from 'react'
 import { Typography } from '@material-ui/core'
+import Router from 'next/router'
+
 import {
   SignInComponent,
   IsAuthenticatedComponent
 } from '../../../generated/GraphQLComponents'
 import { SignInForm } from '../components/SignInForm'
-import Router from 'next/router'
 
 interface Values {
   password: string

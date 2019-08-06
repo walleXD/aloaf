@@ -9,7 +9,8 @@
     "isolatedModules": true,
     "declaration": false,
     "composite": false,
-    "declarationMap": false
+    "declarationMap": false,
+    "baseUrl": "."
   },
   "exclude": ["node_modules", ".next"],
   "include": [

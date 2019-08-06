@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-disable no-console */
 const express = require('express')
 const next = require('next')
 

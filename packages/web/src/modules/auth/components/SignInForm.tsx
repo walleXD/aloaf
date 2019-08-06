@@ -5,7 +5,7 @@ import { TextField } from 'formik-material-ui'
 import Button from '@material-ui/core/Button'
 import { object, string } from 'yup'
 
-import { SignInMutationFn } from 'web/src/generated/GraphQLComponents'
+import { SignInMutationFn } from '../../../generated/GraphQLComponents'
 
 interface FormValues {
   password: string
@@ -50,7 +50,7 @@ export const SignInForm: FC<Props> = ({
         console.log(e)
       }
     }}
-    render={(): ReactElement => (
+    render={({ isSubmitting }): ReactElement => (
       <Form>
         <Field
           id="email"
@@ -72,6 +72,7 @@ export const SignInForm: FC<Props> = ({
           type="submit"
           variant="contained"
           color="primary"
+          disabled={isSubmitting}
         >
           Submit
         </Button>
