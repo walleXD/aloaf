@@ -5,6 +5,7 @@ import { NextPage } from 'next'
 import { SignInComponent } from '../../../generated/GraphQLComponents'
 import { SignInForm } from '../components/SignInForm'
 import { ssrIsAuthenticatedCheck, redirect } from '../utils'
+import { ApolloAppContext } from 'next-with-apollo'
 
 interface Values {
   password: string
@@ -22,9 +23,10 @@ const SignInPage: NextPage = (): ReactElement => (
   </>
 )
 
-SignInPage.getInitialProps = async (ctx): Promise<{}> => {
+SignInPage.getInitialProps = async (
+  ctx: ApolloAppContext
+): Promise<{}> => {
   const { id } = await ssrIsAuthenticatedCheck(
-    //@ts-ignore
     ctx.apolloClient
   )
 

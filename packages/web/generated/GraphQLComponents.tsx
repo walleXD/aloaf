@@ -7,7 +7,7 @@ export type Omit<T, K extends keyof T> = Pick<
   Exclude<keyof T, K>
 >
 /** All built-in and custom scalars, mapped to their actual values */
-export type Scalars = {
+export interface Scalars {
   ID: string
   String: string
   Boolean: boolean
@@ -22,14 +22,14 @@ export type Scalars = {
 }
 
 /** Payload sent to users after successful authentication */
-export type AuthPayload = {
+export interface AuthPayload {
   __typename?: 'AuthPayload'
   accessToken: Scalars['String']
   count: Scalars['Int']
   refreshToken: Scalars['String']
 }
 
-export type Mutation = {
+export interface Mutation {
   __typename?: 'Mutation'
   /** Invalidates existing user's refresh tokens */
   invalidateTokens: Scalars['Boolean']
@@ -41,30 +41,30 @@ export type Mutation = {
   signUp?: Maybe<AuthPayload>
 }
 
-export type MutationRefreshTokensArgs = {
+export interface MutationRefreshTokensArgs {
   refreshToken: Scalars['String']
 }
 
-export type MutationSignInArgs = {
+export interface MutationSignInArgs {
   cookies?: Maybe<Scalars['Boolean']>
   email: Scalars['String']
   password: Scalars['String']
 }
 
-export type MutationSignUpArgs = {
+export interface MutationSignUpArgs {
   cookies?: Maybe<Scalars['Boolean']>
   email: Scalars['String']
   password: Scalars['String']
 }
 
-export type Query = {
+export interface Query {
   __typename?: 'Query'
   hello: Scalars['String']
   /** Returns the currently logged in used */
   me?: Maybe<User>
 }
 
-export type User = {
+export interface User {
   __typename?: 'User'
   count: Scalars['Int']
   /** User's email */
@@ -72,7 +72,7 @@ export type User = {
   /** Id of the user */
   id: Scalars['ID']
 }
-export type IsAuthenticatedQueryVariables = {}
+export interface IsAuthenticatedQueryVariables {}
 
 export type IsAuthenticatedQuery = {
   __typename?: 'Query'
@@ -80,7 +80,7 @@ export type IsAuthenticatedQuery = {
   me: Maybe<{ __typename?: 'User' } & Pick<User, 'id'>>
 }
 
-export type SignInMutationVariables = {
+export interface SignInMutationVariables {
   email: Scalars['String']
   password: Scalars['String']
 }
@@ -94,7 +94,7 @@ export type SignInMutation = { __typename?: 'Mutation' } & {
   >
 }
 
-export type HelloWorldQueryVariables = {}
+export interface HelloWorldQueryVariables {}
 
 export type HelloWorldQuery = {
   __typename?: 'Query'

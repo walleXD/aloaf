@@ -1,13 +1,13 @@
 import Router from 'next/router'
-import { NextPageContext } from 'next'
 import {
   ApolloClient,
   NormalizedCacheObject,
   gql
 } from 'apollo-boost'
+import { ApolloAppContext } from 'next-with-apollo'
 
 export const redirect = (
-  context: NextPageContext,
+  context: ApolloAppContext,
   target: string
 ): void => {
   if (context.res) {
@@ -34,10 +34,7 @@ export const ssrIsAuthenticatedCheck = (
         }
       `
     })
-    .then(({ data }): { id: string } => {
-      return { id: data.me.id }
-    })
-    .catch((): { id: null } => {
-      // Fail gracefully
-      return { id: null }
-    })
+    .then(({ data }): { id: string } => ({
+      id: data.me.id
+    }))
+    .catch((): { id: null } => ({ id: null }))
