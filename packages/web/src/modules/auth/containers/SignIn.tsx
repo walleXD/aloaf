@@ -7,7 +7,7 @@ import { SignInComponent } from '../../../generated/GraphQLComponents'
 import { SignInForm } from '../components/SignInForm'
 import { ssrIsAuthenticatedCheck, redirect } from '../utils'
 
-const SignInPage: NextPage = (): ReactElement => (
+export const SignInPage: NextPage = (): ReactElement => (
   <>
     <Typography>SignIn page</Typography>
     <SignInComponent>

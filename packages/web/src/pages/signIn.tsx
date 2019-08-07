@@ -1,3 +1,3 @@
-import SignInPage from '../modules/auth/containers/SignIn'
+import { SignInPage } from '../modules/auth'
 
 export default SignInPage
