@@ -1,0 +1,15 @@
+overwrite: true
+schema:
+  - "../api/generated/schema.graphql"
+documents: "src/**/*.graphql"
+generates:
+  src/generated/GraphQLComponents.tsx:
+    config:
+      noNamespaces: true
+      scalars:
+        EmailAddress: string
+        DateTime: Date
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-apollo"

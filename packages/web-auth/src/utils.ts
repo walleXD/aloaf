@@ -5,7 +5,7 @@ import {
 } from 'apollo-boost'
 import { ApolloAppContext } from 'next-with-apollo'
 
-import { IsAuthenticatedDocument } from '../../generated/GraphQLComponents'
+import { IsAuthenticatedDocument } from './generated/GraphQLComponents'
 
 /**
  * Isomorphic redirect

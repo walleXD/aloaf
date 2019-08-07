@@ -1,3 +1,3 @@
-import { SignInPage } from '../modules/auth'
+import { SignInPage } from '@loaf/web-auth'
 
 export default SignInPage

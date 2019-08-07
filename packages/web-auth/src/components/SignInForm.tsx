@@ -5,7 +5,7 @@ import { TextField } from 'formik-material-ui'
 import Button from '@material-ui/core/Button'
 import { object, string } from 'yup'
 
-import { SignInMutationFn } from '../../../generated/GraphQLComponents'
+import { SignInMutationFn } from '../generated/GraphQLComponents'
 
 interface FormValues {
   password: string
