@@ -12,6 +12,7 @@
     "declarationMap": false,
     "baseUrl": "."
   },
+  "references": [],
   "exclude": ["node_modules", ".next"],
   "include": [
     "next-env.d.ts",

@@ -23,6 +23,7 @@
     "bootstrap": "lerna bootstrap",
     "lint": "eslint 'packages/**/*.ts?(x)'",
     "format": "prettier-eslint 'packages/**/*.ts?(x)'",
-    "format:w": "yarn format --write"
+    "format:w": "yarn format --write",
+    "dev": "lerna run dev --stream"
   }
 }

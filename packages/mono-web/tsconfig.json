@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "lib": ["esnext"],
+    "module": "commonjs",
+    "rootDir": "src",
+    "noEmit": true,
+    "sourceMap": true,
+    "declaration": true,
+    "composite": true,
+    "declarationMap": true
+  },
+  "exclude": ["node_modules"],
+  "include": ["schema-types.d.ts", "src/**/*.ts"]
+}

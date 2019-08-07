@@ -14,6 +14,9 @@
     },
     {
       "path": "packages/auth"
+    },
+    {
+      "path": "packages/mono-web"
     }
   ],
   "settings": {
@@ -37,8 +40,6 @@
     "[typescriptreact]": {
       "editor.formatOnSave": false
     },
-    "cSpell.words": [
-      "esnext"
-    ]
+    "cSpell.words": ["esnext"]
   }
 }
