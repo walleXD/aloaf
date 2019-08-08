@@ -12,5 +12,5 @@
     "jsx": "preserve"
   },
   "exclude": ["node_modules"],
-  "include": ["schema-types.d.ts", "src/**/*.ts"]
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
 }
