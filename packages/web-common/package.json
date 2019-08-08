@@ -1,0 +1,23 @@
+{
+  "name": "@loaf/web-common",
+  "version": "0.1.0",
+  "main": "src/index.ts",
+  "module": "esm",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "rimraf lib && tsc"
+  },
+  "devDependencies": {
+    "@types/node": "^12.6.8",
+    "concurrently": "^4.1.1",
+    "rimraf": "^2.6.3",
+    "typescript": "^3.5.3"
+  },
+  "peerDependencies": {
+    "@material-ui/core": "^4.3.1",
+    "@material-ui/icons": "^4.2.1",
+    "@material-ui/styles": "^4.3.0",
+    "next": "^9.0.3"
+  }
+}

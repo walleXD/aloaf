@@ -4,7 +4,7 @@ const withTM = require('next-transpile-modules')
 
 const plugins = [
   withTM({
-    transpileModules: ['@loaf/web-auth']
+    transpileModules: ['@loaf/web-auth', '@loaf/web-common']
   })
 ]
 

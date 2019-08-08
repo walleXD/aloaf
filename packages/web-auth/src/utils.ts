@@ -17,6 +17,7 @@ export const redirect = (
   target: string
 ): void => {
   if (context.res) {
+    console.log('about to redirect')
     // server
     // 303: "See other"
     context.res.writeHead(303, { Location: target })

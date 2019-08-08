@@ -1,3 +1,7 @@
+import React, { ReactElement } from 'react'
+
 import IndexPage from '../modules/landing'
 
-export default IndexPage
+const Page = (): ReactElement => <IndexPage />
+
+export default Page
