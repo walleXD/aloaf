@@ -1,12 +1,14 @@
 {
   "name": "@loaf/web-common",
   "version": "0.1.0",
-  "main": "src/index.ts",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "module": "esm",
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "rimraf lib && tsc"
+    "build": "rimraf lib && tsc",
+    "build:pkg": "tsc -w"
   },
   "devDependencies": {
     "@types/node": "^12.6.8",

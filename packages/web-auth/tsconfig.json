@@ -2,9 +2,9 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "lib": ["esnext"],
-    "module": "commonjs",
+    "module": "es2015",
     "rootDir": "src",
-    "noEmit": true,
+    "outDir": "lib",
     "sourceMap": true,
     "declaration": true,
     "composite": true,
@@ -12,9 +12,5 @@
     "jsx": "preserve"
   },
   "exclude": ["node_modules"],
-  "include": [
-    "schema-types.d.ts",
-    "src/**/*.ts",
-    "src/**/*.tsx"
-  ]
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
 }
