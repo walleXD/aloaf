@@ -8,8 +8,8 @@
   "private": true,
   "scripts": {
     "generate": "graphql-codegen --config codegen.yml",
-    "build": "rimraf lib && tsc",
-    "build:pkg": "tsc -w"
+    "build": "tsc",
+    "build:pkg": "yarn build -w"
   },
   "dependencies": {
     "@loaf/web-common": "*",

@@ -7,8 +7,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "rimraf lib && tsc",
-    "build:pkg": "tsc -w"
+    "build": "tsc",
+    "build:pkg": "yarn build -w"
   },
   "devDependencies": {
     "@types/node": "^12.6.8",
