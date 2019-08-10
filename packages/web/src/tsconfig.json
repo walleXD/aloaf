@@ -2,7 +2,6 @@
   "extends": "../../../tsconfig.json",
   "compilerOptions": {
     "lib": ["dom", "dom.iterable", "esnext"],
-    "noEmit": true,
     "module": "esnext",
     "jsx": "preserve",
     "allowJs": true,
@@ -10,12 +9,12 @@
     "declaration": false,
     "composite": false,
     "declarationMap": false,
+    "noEmit": true,
     "baseUrl": "."
   },
-  "exclude": ["node_modules", ".next"],
+  "exclude": ["node_modules"],
   "include": [
     "next-env.d.ts",
-    "client-types.tsx",
     "**/*.ts",
     "**/*.tsx",
     "../server.js"

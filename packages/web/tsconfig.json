@@ -1,0 +1,11 @@
+{
+  "references": [
+    {
+      "path": "../web-auth"
+    },
+    {
+      "path": "../web-common"
+    }
+  ],
+  "exclude": ["src", "lib", "node_modules"]
+}

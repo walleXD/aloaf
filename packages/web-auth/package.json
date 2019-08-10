@@ -8,7 +8,7 @@
   "private": true,
   "scripts": {
     "generate": "graphql-codegen --config codegen.yml",
-    "build": "tsc",
+    "build": "tsc -b",
     "build:pkg": "yarn build -w"
   },
   "dependencies": {
