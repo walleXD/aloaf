@@ -22,7 +22,7 @@
       },
       "sourceMaps": true,
       "port": 9239,
-      "console": "integratedTerminal"
+      "console": "internalConsole"
     }
   ]
 }

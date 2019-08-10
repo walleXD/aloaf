@@ -24,6 +24,7 @@ import {
   getActiveUser
 } from '@loaf/auth'
 import { RequestHandler } from 'micro'
+import cors from 'micro-cors'
 
 interface Context {
   res: Response
@@ -92,4 +93,6 @@ const bootstrap: RequestHandler = async (
   return server.createHandler()(req, res)
 }
 
-module.exports = bootstrap
+module.exports = cors({
+  allowMethods: ['POST', 'GET']
+})(bootstrap)
