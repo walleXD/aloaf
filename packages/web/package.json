@@ -7,6 +7,8 @@
     "dev:app": "node devServer.js",
     "dev:pkg": "yarn build:pkg -w",
     "dev": "concurrently \"yarn dev:pkg\" \"yarn dev:app\"",
+    "dev:debug": "NODE_OPTIONS=\"--inspect=0.0.0.0:9299\" node --inspect=0.0.0.0:9289 devServer.js",
+    "debug": "concurrently \"yarn dev:pkg\" \"yarn dev:debug\"",
     "build:app": "next build src",
     "build:pkg": "tsc -b",
     "build": "concurrently \"yarn build:pkg\" \"yarn build:app\"",

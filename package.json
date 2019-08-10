@@ -25,6 +25,7 @@
     "lint": "eslint 'packages/**/*.ts?(x)'",
     "format": "prettier-eslint 'packages/**/*.ts?(x)'",
     "format:w": "yarn format --write",
-    "dev": "lerna run dev --stream --parallel"
+    "dev": "lerna run dev --stream --parallel",
+    "debug": "lerna run dev --stream --parallel"
   }
 }

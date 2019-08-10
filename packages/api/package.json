@@ -45,6 +45,7 @@
     "dev:ts": "tsc -b --watch",
     "dev:server": "micro-dev --watch ../ -p 4000",
     "dev:debug": "node --inspect node_modules/.bin/micro-dev --watch ../ -p 4000",
-    "dev": "yarn build && concurrently \"yarn dev:ts\" \"yarn dev:server\""
+    "dev": "yarn build && concurrently \"yarn dev:ts\" \"yarn dev:server\"",
+    "debug": "yarn build && concurrently \"yarn dev:ts\" \"yarn dev:debug\""
   }
 }
