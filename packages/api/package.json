@@ -23,6 +23,7 @@
     "typescript": "^3.5.3"
   },
   "dependencies": {
+    "@loaf/api-profile": "*",
     "@loaf/auth": "*",
     "@loaf/mono-test": "*",
     "apollo-connector-mongodb": "^2.0.3",

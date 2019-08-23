@@ -3,6 +3,7 @@
  * Do not make changes to this file directly
  */
 
+import * as t from '../src/typeDefs'
 import { core } from 'nexus'
 declare global {
   interface NexusGenCustomInputMethods<
@@ -91,7 +92,6 @@ export interface NexusGenFieldTypes {
   }
   Query: {
     // field return type
-    hello: string // String!
     me: NexusGenRootTypes['User'] | null // User
   }
   User: {
@@ -151,7 +151,7 @@ export type NexusGenScalarNames =
 export type NexusGenUnionNames = never
 
 export interface NexusGenTypes {
-  context: any
+  context: t.ProfileContext
   inputTypes: NexusGenInputs
   rootTypes: NexusGenRootTypes
   argTypes: NexusGenArgTypes

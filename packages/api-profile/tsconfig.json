@@ -3,27 +3,20 @@
   "compilerOptions": {
     "lib": ["esnext"],
     "module": "commonjs",
-    "target": "es2019",
+    "rootDir": "src",
     "outDir": "lib",
     "sourceMap": true,
-
-    "isolatedModules": false,
+    "target": "es2019",
     "declaration": true,
-    "composite": false,
+    "composite": true,
     "declarationMap": true
   },
+  "exclude": ["node_modules", "lib"],
   "references": [
     {
-      "path": "../mono-test"
-    },
-    {
       "path": "../auth"
-    },
-    {
-      "path": "../api-profile"
     }
   ],
-  "exclude": ["node_modules", "lib"],
   "include": [
     "./generated/schema-types.d.ts",
     "src/**/*.ts"

@@ -54,8 +54,6 @@ type Profile {
 }
 
 type Query {
-  hello: String!
-
   """
   Returns the currently logged in used
   """
